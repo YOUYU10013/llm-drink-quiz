@@ -315,6 +315,7 @@
       <div class="drink-name" id="drinkName"></div>
       <p class="tagline" id="tagline"></p>
       <p class="description" id="description"></p>
+      <div id="tags" style="margin-bottom:12px"></div>
       <button class="restart-btn" onclick="restartQuiz()">再測一次</button>
 
       <div class="legend">
@@ -344,110 +345,73 @@
      * tag: 額外標籤，對應遊戲/繪畫/編碼/資料達人
      * badgeType: 用於設定徽章顏色 (pro:旗艦, classic:經典, season:季節已過)
      */
-    const results = {
-      // GPT-5 子風味
-      'GPT5-long': {
-        model: 'GPT-5-長文版',
-        drink: '氮氣冷萃咖啡·長文',
-        icon: '🧊☕',
-        badge: '旗艦混合型',
-        badgeType: 'pro',
-        tag: '編碼達人',
-        tagline: '「深度推理，長文處理與編碼的專家。」',
-        description: '基於統一架構，融合 GPT 與 o 系列突破，在運算速度、理解能力、推理邏輯、上下文處理與結構化思考方面全面進化【550532427018473†L419-L427】。適合長文創作、程式開發與複雜任務解決【550532427018473†L454-L456】。'
-      },
-      'GPT5-multi': {
-        model: 'GPT-5-多模態版',
-        drink: '氮氣冷萃咖啡·多模態',
-        icon: '🧊☕',
-        badge: '旗艦混合型',
-        badgeType: 'pro',
-        tag: '遊戲達人',
-        tagline: '「跨模態領航，代理執行的全能助手。」',
-        description: '匯集 GPT-4o、o 系列模型與推理代理技術的突破，以統一架構提供最佳化效能【550532427018473†L423-L427】。能精確串聯工具完成複雜任務，長時間多階段代理任務表現出色【550532427018473†L461-L465】；支援調整回應長短與推理深度，並可自訂工具【550532427018473†L467-L469】。'
-      },
-      // 其他模型
-      'A-1-spark': {
-        model: 'GPT-4o',
-        drink: '冰火特調',
-        icon: '🍹',
-        badge: '季節已過',
-        badgeType: 'season',
-        tag: '遊戲達人',
-        tagline: '「今天適合冒險，來一杯語場冰火吧！」',
-        description: '多模態支援強大，創意爆發但偶爾會走偏；刺激、驚喜，適合腦力激盪。'
-      },
-      'A-1-focus': {
-        model: 'GPT-4.1',
-        drink: '水果沙瓦',
-        icon: '🍹',
-        badge: '季節已過',
-        badgeType: 'season',
-        tag: '無',
-        tagline: '「清爽有活力，創意任務的好夥伴！」',
-        description: '清爽、酸甜、實用快速；讓創意工作變得輕鬆愉快。'
-      },
-      'B-2-focus': {
-        model: 'Claude Sonnet',
-        drink: '香醇拿鐵',
-        icon: '☕',
-        badge: '經典款',
-        badgeType: 'classic',
-        tag: '規劃達人',
-        tagline: '「你需要一杯穩定的結構性咖啡！」',
-        description: '語境收斂佳、任務彈性高；像完美比例的拿鐵，從容完成規劃型任務。'
-      },
-      'B-2-deep': {
-        model: 'Claude Opus',
-        drink: '濃縮咖啡',
-        icon: '☕',
-        badge: '經典款',
-        badgeType: 'classic',
-        tag: '策略達人',
-        tagline: '「慢慢推理，來一杯語場濃縮。」',
-        description: '適合大型企劃與多層推理；濃郁深沉，可長期跟進複雜工作。'
-      },
-      'C-3-quick': {
-        model: 'Claude Haiku',
-        drink: '濾泡咖啡',
-        icon: '☕',
-        badge: '經典款',
-        badgeType: 'classic',
-        tag: '創意達人',
-        tagline: '「速戰速決！效率開關已開啟。」',
-        description: '輕快、效率佳，適合小專案與快速應對；簡單直接，不拖泥帶水。'
-      },
-      'D-4-deep': {
-        model: 'GPT-o3 系列',
-        drink: '能量飲料',
-        icon: '🥤',
-        badge: '季節已過',
-        badgeType: 'season',
-        tag: '資料達人',
-        tagline: '「推理模式啟動，慢工出細活。」',
-        description: '推理能力穩定，節奏慢但紮實；給你持續的邏輯動力。'
-      },
-      'E-5-stable': {
-        model: 'Gemini',
-        drink: '養生茶',
-        icon: '🍵',
-        badge: '資料整合',
-        badgeType: 'pro',
-        tag: '資料達人',
-        tagline: '「今天適合收斂整理，來一壺語場養生茶。」',
-        description: '原生多模態能力，支援文字、圖像、聲音與影片理解【220365491318282†L569-L576】；上下文處理突破 200 萬 tokens【220365491318282†L574-L576】；代理式智慧與工具調用能自動查詢並生成輸出【220365491318282†L574-L576】。'
-      },
-      'B-4-focus': {
-        model: 'GPT-4.5',
-        drink: '特調雞尾酒',
-        icon: '🍸',
-        badge: '季節已過',
-        badgeType: 'season',
-        tag: '技術達人',
-        tagline: '「穩定優雅，技術任務的理想選擇。」',
-        description: '語感圓潤、安全性高；適合穩定輸出的技術/工程任務。'
-      }
-    };
+const results = {
+  // —— 新旗艦：GPT-5 兩種子風味 —— 
+  'GPT5-LONG': {
+    model:'GPT-5（長文偏重）', drink:'氮氣冷萃咖啡・長文',
+    icon:'🧊☕', badge:'旗艦混合型', badgeType:'pro',
+    tagline:'「穩得住長文，也扛得起推理。」',
+    description:'長文/規劃/深推理任務最穩的組合；跨段落引用與結構化產出更可靠。適合作文案規劃、長報告、規格書、研究筆記。',
+    tags:['規劃達人','資料達人','策略達人']
+  },
+  'GPT5-MULTI': {
+    model:'GPT-5（多模態偏重）', drink:'氮氣冷萃咖啡・多模態',
+    icon:'🧊☕', badge:'旗艦混合型', badgeType:'pro',
+    tagline:'「看圖也懂，動手也快。」',
+    description:'圖片/截圖/檔案理解 + 文字推理；適合把圖表、UI 截圖、PDF 與文字一起協作。',
+    tags:['繪畫達人','資料達人','編碼達人']
+  },
+
+  // —— 原有映射（4 系列標註《季節已過》）——
+  'A-1-spark': {
+    model:'GPT-4o《季節已過》', drink:'冰火特調', icon:'🍹',
+    badge:'多模態', tagline:'「今天適合冒險，來一杯語場冰火吧！」',
+    description:'多模態支援強、創意高但偶有偏航。現在作為語場定位參考卡使用。', 
+    tags:['創意達人']
+  },
+  'A-1-focus': {
+    model:'GPT-4.1《季節已過》', drink:'水果沙瓦', icon:'🍹',
+    badge:'經典款', badgeType:'classic',
+    tagline:'「清爽有活力，創意任務的好夥伴！」',
+    description:'偏實用快速；現作為對照參考。', tags:['創意達人']
+  },
+  'B-2-focus': {
+    model:'Claude Sonnet', drink:'香醇拿鐵', icon:'☕',
+    badge:'結構穩健',
+    tagline:'「你需要一杯穩定的結構性咖啡！」',
+    description:'語境收斂佳、任務彈性高；適合規劃型內容。', tags:['規劃達人']
+  },
+  'B-2-deep': {
+    model:'Claude Opus', drink:'濃縮咖啡', icon:'☕',
+    badge:'重推理',
+    tagline:'「慢慢推理，來一杯語場濃縮。」',
+    description:'大型企劃/多層推理首選。', tags:['策略達人']
+  },
+  'C-3-quick': {
+    model:'Claude Haiku', drink:'濾泡咖啡', icon:'☕',
+    badge:'輕快',
+    tagline:'「速戰速決！效率開關已開啟。」',
+    description:'小專案與快速應對。', tags:['效率達人']
+  },
+  'D-4-deep': {
+    model:'GPT-o3 系列', drink:'能量飲料', icon:'🥤',
+    badge:'嚴謹推理',
+    tagline:'「推理模式啟動，慢工出細活。」',
+    description:'嚴謹、慢熱、紮實。', tags:['策略達人']
+  },
+  'E-5-stable': {
+    model:'Gemini', drink:'養生茶', icon:'🍵',
+    badge:'整合查詢',
+    tagline:'「今天適合收斂整理，來一壺語場養生茶。」',
+    description:'原生多模態、超長上下文、整合查詢/搜尋友善。', tags:['資料達人']
+  },
+  'B-4-focus': {
+    model:'GPT-4.5《季節已過》', drink:'特調雞尾酒', icon:'🍸',
+    badge:'經典款', badgeType:'classic',
+    tagline:'「穩定優雅，技術任務的理想選擇。」',
+    description:'語感圓潤、安全性高；現作為參考卡。', tags:['編碼達人']
+  }
+};
 
     function startQuiz() {
       document.getElementById('startScreen').style.display = 'none';
@@ -472,50 +436,60 @@
       }
     }
 
-    function showResult() {
-      document.getElementById('progress').style.display = 'none';
-      let a1 = answers[1], a2 = answers[2], a3 = answers[3], a4 = answers[4];
-      let key = '';
-      // 判斷是否為 GPT-5 分支
-      const wantHybrid = (a1 === 'A' || a1 === 'B') && (a2 === '1' || a2 === '2') && (a3 === 'spark' || a3 === 'focus');
-      if (wantHybrid) {
-        key = (a4 === 'yes') ? 'GPT5-multi' : 'GPT5-long';
-      }
-      // 既有映射
-      if (!key && a1 === 'A' && a2 === '1') {
-        key = (a3 === 'spark' ? 'A-1-spark' : 'A-1-focus');
-      } else if (!key && a1 === 'B' && a2 === '2') {
-        key = (a3 === 'deep' ? 'B-2-deep' : 'B-2-focus');
-      } else if (!key && a1 === 'C' && a2 === '3') {
-        key = 'C-3-quick';
-      } else if (!key && a1 === 'D' && a2 === '4') {
-        key = 'D-4-deep';
-      } else if (!key && a1 === 'E' && a2 === '5') {
-        key = 'E-5-stable';
-      } else if (!key && a1 === 'B' && a2 === '4') {
-        key = 'B-4-focus';
-      }
-      // 預設近似
-      if (!key) {
-        if (a3 === 'spark' || a3 === 'quick') key = 'A-1-spark';
-        else if (a3 === 'deep') key = 'B-2-deep';
-        else if (a3 === 'stable') key = 'E-5-stable';
-        else key = 'B-2-focus';
-      }
-      const r = results[key] || results['B-2-focus'];
-      document.getElementById('drinkIcon').textContent = r.icon;
-      document.getElementById('modelName').textContent = r.model;
-      const badge = document.getElementById('badge');
-      badge.textContent = r.badge;
-      badge.className = 'badge ' + (r.badgeType || '');
-      const tagLabel = document.getElementById('tagLabel');
-      tagLabel.textContent = r.tag || '';
-      document.getElementById('drinkName').textContent = r.drink;
-      document.getElementById('tagline').textContent = r.tagline;
-      document.getElementById('description').textContent = r.description;
-      document.getElementById('result').classList.add('active');
-    }
+function showResult(){
+  document.getElementById('progress').style.display='none';
+  const a1 = answers[1], a2 = answers[2], a3 = answers[3], a4 = answers[4]; // a4 可能不存在
 
+  // —— 先判斷是否進 GPT-5 區 —— 
+  // 條件：需求偏規劃/技術/深推理（Q1= A/B/D 且 Q2= 1/2/4）
+  const wantsHybrid =
+    (a1==='A' || a1==='B' || a1==='D') &&
+    (a2==='1' || a2==='2' || a2==='4');
+
+  let key = '';
+
+  if (wantsHybrid){
+    // 有第4題就依是否需要看圖/檔案來分流；沒有第4題也能進長文版
+    if (a4 === 'yes') key = 'GPT5-MULTI';
+    else key = 'GPT5-LONG';
+  }
+
+  // —— 舊映射（維持原邏輯）——
+  if(!key && a1==='A' && a2==='1'){ key = (a3==='spark' ? 'A-1-spark' : 'A-1-focus'); }
+  else if(!key && a1==='B' && a2==='2'){ key = (a3==='deep' ? 'B-2-deep' : 'B-2-focus'); }
+  else if(!key && a1==='C' && a2==='3'){ key = 'C-3-quick'; }
+  else if(!key && a1==='D' && a2==='4'){ key = 'D-4-deep'; }
+  else if(!key && a1==='E' && a2==='5'){ key = 'E-5-stable'; }
+  else if(!key && a1==='B' && a2==='4'){ key = 'B-4-focus'; }
+
+  // —— 預設回退（也提高 GPT-5 命中率）——
+  if(!key){
+    if (a2==='2' || a2==='4') key = 'GPT5-LONG';            // 偏規劃/技術 → 長文
+    else if (a3==='spark' || a3==='quick') key = 'A-1-spark';
+    else if (a3==='deep') key = 'B-2-deep';
+    else if (a3==='stable') key = 'E-5-stable';
+    else key = 'B-2-focus';
+  }
+
+  const r = results[key] || results['B-2-focus'];
+
+  document.getElementById('drinkIcon').textContent = r.icon;
+  document.getElementById('modelName').textContent = r.model;
+  const badge = document.getElementById('badge');
+  badge.textContent = r.badge || '';
+  badge.className = 'badge ' + (r.badgeType || '');
+  document.getElementById('drinkName').textContent = r.drink;
+  document.getElementById('tagline').textContent = r.tagline;
+  document.getElementById('description').textContent = r.description;
+
+  // 角色標籤（若你頁面已放位置，可一起更新）
+  const tagHost = document.getElementById('tags');
+  if (tagHost){
+    tagHost.innerHTML = (r.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
+  }
+
+  document.getElementById('result').classList.add('active');
+}
     function restartQuiz() {
       answers = {};
       currentQuestion = 0;
