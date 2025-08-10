@@ -387,6 +387,13 @@
   margin-top: 20px;
 }
 ```
+/* 隱藏「為什麼選它？」按鈕，只有結果頁顯示時才呈現 */
+.why-btn {
+  display: none;
+}
+.result.active .why-btn {
+  display: inline-block; /* 或者 block，都可以讓按鈕在結果頁顯示 */
+}
 
   </style>
 </head>
@@ -469,12 +476,14 @@
   <p class="description" id="description"></p>
   <div id="tags" style="margin-bottom:12px"></div>
   
-  <div class="btn-row">
-    <button class="ghost-btn" onclick="shareResult()">分享結果 📤</button>
-    <button class="ghost-btn" onclick="generateShareImage()">存成分享圖 🖼️</button>
-    <button class="ghost-btn" onclick="showWhyModal()">為什麼選它？ 🤔</button>
-    <button class="restart-btn" onclick="restartQuiz()">再測一次</button>
-  </div>
+<div class="btn-row">
+  <button class="ghost-btn" onclick="shareResult()">分享結果 📤</button>
+  <button class="ghost-btn" onclick="generateShareImage()">存成分享圖 🖼️</button>
+  <button class="ghost-btn why-btn" onclick="showWhyModal()">為什麼選它？ 🤔</button>
+</div>
+<!-- 將「再測一次」按鈕移出 .btn-row，使其單獨一行 -->
+<button class="restart-btn" onclick="restartQuiz()">再測一次</button>
+
 
   <div class="legend">
     <h3>🍹 新版 LLM 飲品全圖</h3>
