@@ -271,7 +271,7 @@
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.4);  /* 半透明背景遮罩 */
   animation: fadeIn 0.3s;
 }
 .modal-content {
@@ -869,27 +869,23 @@ ${tagline}
     }
 
     // 顯示「為什麼選它」Modal
-    function showWhyModal() {
-      const modelName = document.getElementById('modelName').textContent;
-      const family = getFamily(modelName);
-      
-      if (!family || !familyTraits[family]) return;
-      
-      const traits = familyTraits[family];
-      const modal = document.getElementById('whyModal');
-      const modalBody = document.getElementById('modalBody');
-      
-      document.getElementById('modalTitle').textContent = traits.title;
-      
-      modalBody.innerHTML = `
-        <ul class="trait-list">
-          ${traits.traits.map(t => `<li>${t}</li>`).join('')}
-        </ul>
-        <div class="modal-footer">${traits.footer}</div>
-      `;
-      
-      modal.style.display = 'block';
-    }
+function showWhyModal() {
+  const modelName = document.getElementById('modelName').textContent;
+  const family = getFamily(modelName);
+  if (!family || !familyTraits[family]) return;  // 若沒有對應資料則不顯示
+  const traits = familyTraits[family];
+  // 設定 Modal 標題和內容
+  document.getElementById('modalTitle').textContent = traits.title;
+  document.getElementById('modalBody').innerHTML = `
+    <ul class="trait-list">
+      ${traits.traits.map(t => `<li>${t}</li>`).join('')}
+    </ul>
+    <div class="modal-footer">${traits.footer}</div>
+  `;
+  // 顯示 Modal
+  document.getElementById('whyModal').style.display = 'block';
+}
+
 
     // 關閉Modal
     function closeModal() {
