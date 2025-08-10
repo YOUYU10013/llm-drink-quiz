@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8" />
@@ -12,8 +11,8 @@
       padding: 0;
       box-sizing: border-box;
     }
+    
     body {
-      /* 大地黏土背景色：淡土黃色 */
       background: #F0E5D8;
       font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
@@ -23,35 +22,40 @@
       padding: 20px;
       color: #5D4037;
     }
+    
     .container {
       background: #F0E5D8;
       border-radius: 24px;
       padding: 40px;
       max-width: 680px;
       width: 100%;
-      /* 外陰影：模擬黏土浮起效果 */
       box-shadow: -12px -12px 24px rgba(255, 255, 255, 0.5),
                   12px 12px 24px rgba(0, 0, 0, 0.1);
     }
+    
     h1 {
       text-align: center;
       margin-bottom: 12px;
       font-size: 28px;
       font-weight: 800;
     }
+    
     .subtitle {
       text-align: center;
       margin-bottom: 24px;
       font-size: 16px;
       color: #4E3B31;
     }
+    
     .start-screen {
       text-align: center;
     }
+    
     .start-icon {
       font-size: 96px;
       margin-bottom: 24px;
     }
+    
     .start-btn {
       padding: 18px 44px;
       background: #F0E5D8;
@@ -61,20 +65,22 @@
       font-weight: 700;
       cursor: pointer;
       color: #5D4037;
-      /* 內陰影讓按鈕看起來凹陷 */
       box-shadow: inset -6px -6px 12px rgba(255, 255, 255, 0.5),
                   inset 6px 6px 12px rgba(0, 0, 0, 0.1);
       transition: all 0.3s;
     }
+    
     .start-btn:hover {
       transform: scale(1.04);
     }
+    
     .progress {
       display: flex;
       justify-content: center;
       gap: 10px;
       margin-bottom: 24px;
     }
+    
     .progress-dot {
       width: 12px;
       height: 12px;
@@ -84,31 +90,38 @@
                   2px 2px 4px rgba(0, 0, 0, 0.1);
       transition: all 0.3s;
     }
+    
     .progress-dot.active {
       background: #C39B7B;
       transform: scale(1.4);
     }
+    
     .question-container {
       display: none;
       animation: fadeIn 0.5s ease-out forwards;
     }
+    
     .question-container.active {
       display: block;
     }
+    
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    
     .question {
       font-size: 20px;
       font-weight: 700;
       margin-bottom: 18px;
     }
+    
     .options {
       display: flex;
       flex-direction: column;
       gap: 14px;
     }
+    
     .option {
       padding: 16px 24px;
       background: #F0E5D8;
@@ -118,37 +131,43 @@
       text-align: left;
       cursor: pointer;
       color: #5D4037;
-      /* 外陰影模擬浮起 */
       box-shadow: -8px -8px 16px rgba(255, 255, 255, 0.6),
                   8px 8px 16px rgba(0, 0, 0, 0.08);
       transition: all 0.3s;
     }
+    
     .option:hover {
       transform: translateY(-3px);
       box-shadow: -4px -4px 8px rgba(255, 255, 255, 0.6),
                   4px 4px 8px rgba(0, 0, 0, 0.12);
     }
+    
     .result {
       display: none;
       text-align: center;
       animation: slideUp 0.8s ease-out forwards;
     }
+    
     .result.active {
       display: block;
     }
+    
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    
     .drink-icon {
       font-size: 72px;
       margin-bottom: 16px;
     }
+    
     .model-name {
       font-size: 28px;
       font-weight: 800;
       margin-bottom: 6px;
     }
+    
     .badge {
       display: inline-block;
       padding: 4px 10px;
@@ -157,24 +176,28 @@
       margin-bottom: 12px;
       color: #fff;
     }
+    
     .badge.pro { background: #C39B7B; }
     .badge.classic { background: #A0A0A0; }
     .badge.season { background: #D3C4B3; color: #5D4037; }
     .badge.special { background: linear-gradient(45deg, #667eea, #764ba2); }
+    
     .tag {
       display: inline-block;
-      margin-bottom: 12px;
+      margin: 0 2px;
       padding: 3px 8px;
       border-radius: 8px;
       font-size: 12px;
       background: #B07D62;
       color: #fff;
     }
+    
     .drink-name {
       font-size: 20px;
       color: #7D5A4C;
       margin-bottom: 12px;
     }
+    
     .tagline {
       font-size: 18px;
       font-style: italic;
@@ -182,6 +205,7 @@
       color: #B07D62;
       margin-bottom: 16px;
     }
+    
     .description {
       font-size: 15px;
       line-height: 1.6;
@@ -192,21 +216,7 @@
                   inset 6px 6px 12px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
     }
-    .restart-btn {
-      padding: 14px 36px;
-      background: #F0E5D8;
-      color: #5D4037;
-      border: none;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: inset -6px -6px 12px rgba(255, 255, 255, 0.5),
-                  inset 6px 6px 12px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s;
-    }
-    .restart-btn:hover {
-      transform: scale(1.05);
-    }
+    
     .btn-row {
       display: flex;
       gap: 10px;
@@ -214,6 +224,7 @@
       flex-wrap: wrap;
       margin-bottom: 10px;
     }
+    
     .ghost-btn {
       padding: 14px 16px;
       background: #F0E5D8;
@@ -226,23 +237,45 @@
                   inset 6px 6px 12px rgba(0, 0, 0, 0.1);
       transition: all 0.3s;
     }
+    
     .ghost-btn:hover {
       transform: scale(1.05);
     }
+    
+    .restart-btn {
+      padding: 14px 36px;
+      background: #F0E5D8;
+      color: #5D4037;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: inset -6px -6px 12px rgba(255, 255, 255, 0.5),
+                  inset 6px 6px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+    }
+    
+    .restart-btn:hover {
+      transform: scale(1.05);
+    }
+    
     .legend {
       margin-top: 24px;
       text-align: left;
     }
+    
     .legend h3 {
       font-size: 18px;
       margin-bottom: 8px;
       font-weight: 700;
     }
+    
     .legend .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
+    
     .legend .item {
       background: #F0E5D8;
       padding: 12px;
@@ -252,149 +285,156 @@
       box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.6),
                   5px 5px 10px rgba(0, 0, 0, 0.08);
     }
+    
     .legend .item.season {
       opacity: 0.6;
     }
+    
     .small {
       font-size: 12px;
       color: #7D5A4C;
       margin-top: 8px;
     }
-
-```
-/* Modal樣式 */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);  /* 半透明背景遮罩 */
-  animation: fadeIn 0.3s;
-}
-.modal-content {
-  position: relative;
-  background: #F0E5D8;
-  margin: 10% auto;
-  padding: 30px;
-  width: 90%;
-  max-width: 500px;
-  border-radius: 24px;
-  box-shadow: -20px -20px 40px rgba(255, 255, 255, 0.5),
-              20px 20px 40px rgba(0, 0, 0, 0.15);
-  animation: slideUp 0.3s;
-}
-.close {
-  position: absolute;
-  right: 20px;
-  top: 15px;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-  color: #7D5A4C;
-}
-.close:hover {
-  color: #5D4037;
-}
-.modal h3 {
-  color: #5D4037;
-  margin-bottom: 20px;
-  font-size: 22px;
-}
-.trait-list {
-  list-style: none;
-  padding: 0;
-}
-.trait-list li {
-  padding: 12px 15px;
-  margin-bottom: 10px;
-  background: #F0E5D8;
-  border-radius: 15px;
-  box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.5),
-              inset 4px 4px 8px rgba(0, 0, 0, 0.08);
-  font-size: 15px;
-  line-height: 1.5;
-}
-.trait-list li:before {
-  content: "✓ ";
-  color: #C39B7B;
-  font-weight: bold;
-  margin-right: 5px;
-}
-.modal-footer {
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px solid rgba(0,0,0,0.1);
-  font-style: italic;
-  color: #7D5A4C;
-  text-align: center;
-  font-size: 14px;
-}
-.why-btn {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: #F0E5D8;
-  border: none;
-  border-radius: 20px;
-  font-size: 14px;
-  cursor: pointer;
-  color: #5D4037;
-  box-shadow: -6px -6px 12px rgba(255, 255, 255, 0.5),
-              6px 6px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s;
-}
-.why-btn:hover {
-  transform: scale(1.02);
-}
-
-/* 畢業證書動畫 */
-@keyframes certificateSlide {
-  from { transform: scale(0) rotate(-180deg); opacity: 0; }
-  to { transform: scale(1) rotate(0deg); opacity: 1; }
-}
-.certificate {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 40px;
-  border-radius: 20px;
-  text-align: center;
-  z-index: 2000;
-  animation: certificateSlide 0.8s;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-.certificate h2 {
-  font-size: 36px;
-  margin-bottom: 20px;
-}
-.certificate p {
-  font-size: 18px;
-  margin-bottom: 15px;
-}
-.certificate button {
-  padding: 12px 30px;
-  background: white;
-  color: #667eea;
-  border: none;
-  border-radius: 20px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 20px;
-}
-```
-/* 隱藏「為什麼選它？」按鈕，只有結果頁顯示時才呈現 */
-.why-btn {
-  display: none;
-}
-.result.active .why-btn {
-  display: inline-block; /* 或者 block，都可以讓按鈕在結果頁顯示 */
-}
-
+    
+    /* Modal 樣式 - 確保預設隱藏 */
+    .modal {
+      display: none; /* 預設隱藏 */
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      animation: fadeIn 0.3s;
+    }
+    
+    .modal-content {
+      position: relative;
+      background: #F0E5D8;
+      margin: 10% auto;
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 24px;
+      box-shadow: -20px -20px 40px rgba(255, 255, 255, 0.5),
+                  20px 20px 40px rgba(0, 0, 0, 0.15);
+      animation: slideUp 0.3s;
+    }
+    
+    .close {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #7D5A4C;
+    }
+    
+    .close:hover {
+      color: #5D4037;
+    }
+    
+    .modal h3 {
+      color: #5D4037;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+    
+    .trait-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .trait-list li {
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      background: #F0E5D8;
+      border-radius: 15px;
+      box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.5),
+                  inset 4px 4px 8px rgba(0, 0, 0, 0.08);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    
+    .trait-list li:before {
+      content: "✓ ";
+      color: #C39B7B;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    
+    .modal-footer {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      font-style: italic;
+      color: #7D5A4C;
+      text-align: center;
+      font-size: 14px;
+    }
+    
+    /* 畢業證書動畫 */
+    @keyframes certificateSlide {
+      from { transform: scale(0) rotate(-180deg); opacity: 0; }
+      to { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    
+    .certificate {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      z-index: 2000;
+      animation: certificateSlide 0.8s;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .certificate h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+    
+    .certificate p {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    
+    .certificate button {
+      padding: 12px 30px;
+      background: white;
+      color: #667eea;
+      border: none;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    
+    /* 手機優化 */
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 20px;
+      }
+      
+      .legend .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .btn-row {
+        flex-direction: column;
+      }
+      
+      .ghost-btn, .restart-btn {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -402,116 +442,110 @@
     <h1>🧪 LLM語場飲品心理測驗（2025 GPT-5版）</h1>
     <p class="subtitle">找出今天最適合你的 AI 模型飲品，體驗大地黏土風</p>
 
-```
-<!-- 起始畫面 -->
-<div class="start-screen" id="startScreen">
-  <div class="start-icon">🧊☕️🍹🥤🍵</div>
-  <p style="font-size:16px;color:#4E3B31;margin-bottom:24px">
-    每個 AI 模型都有獨特的「語場風味」，<br>
-    透過 4 個問題，找出今天最對味的 AI 夥伴！
-  </p>
-  <button class="start-btn" onclick="startQuiz()">開始測驗</button>
-</div>
-
-<!-- 進度圓點 -->
-<div class="progress" id="progress" style="display:none">
-  <div class="progress-dot" id="dot1"></div>
-  <div class="progress-dot" id="dot2"></div>
-  <div class="progress-dot" id="dot3"></div>
-  <div class="progress-dot" id="dot4"></div>
-</div>
-
-<!-- Q1 -->
-<div class="question-container" id="q1">
-  <div class="question">Q1. 今天你比較想要…</div>
-  <div class="options">
-    <button class="option" onclick="selectAnswer(1,'A')">🎨 刺激、有創意、有點不確定性</button>
-    <button class="option" onclick="selectAnswer(1,'B')">📐 穩定、有邏輯、有架構</button>
-    <button class="option" onclick="selectAnswer(1,'C')">⚡ 快速回應、輕量操作</button>
-    <button class="option" onclick="selectAnswer(1,'D')">🧠 深度推理、慢慢來</button>
-    <button class="option" onclick="selectAnswer(1,'E')">📚 查資料、整合資訊</button>
-  </div>
-</div>
-
-<!-- Q2 -->
-<div class="question-container" id="q2">
-  <div class="question">Q2. 你的任務是…</div>
-  <div class="options">
-    <button class="option" onclick="selectAnswer(2,'1')">💡 創意發想、企劃點子、文案寫作</button>
-    <button class="option" onclick="selectAnswer(2,'2')">📝 長文案、規劃型內容、專案合作</button>
-    <button class="option" onclick="selectAnswer(2,'3')">🔄 翻譯、整理、快速生成</button>
-    <button class="option" onclick="selectAnswer(2,'4')">💻 技術／編碼／邏輯任務</button>
-    <button class="option" onclick="selectAnswer(2,'5')">📊 報告、事實查詢、找資料</button>
-  </div>
-</div>
-
-<!-- Q3 -->
-<div class="question-container" id="q3">
-  <div class="question">Q3. 你今天的心情是…</div>
-  <div class="options">
-    <button class="option" onclick="selectAnswer(3,'spark')">🔸 想被 AI 激發、覺得可以挑戰</button>
-    <button class="option" onclick="selectAnswer(3,'focus')">🔹 想完成任務，不要拖太久</button>
-    <button class="option" onclick="selectAnswer(3,'quick')">🔺 想快結束、不想想太多</button>
-    <button class="option" onclick="selectAnswer(3,'deep')">🔻 想深入研究、沒關係花點時間</button>
-    <button class="option" onclick="selectAnswer(3,'stable')">🟩 想穩穩完成，風格無所謂</button>
-  </div>
-</div>
-
-<!-- Q4: 新增 - 是否需要看圖/檔案理解 -->
-<div class="question-container" id="q4">
-  <div class="question">Q4. 需要 AI 幫忙理解圖片/影片/檔案嗎？</div>
-  <div class="options">
-    <button class="option" onclick="selectAnswer(4,'yes')">✅ 需要，圖片影片檔案都來！</button>
-    <button class="option" onclick="selectAnswer(4,'no')">❌ 不需要，文字就好</button>
-  </div>
-</div>
-
-<!-- 結果頁 -->
-<div class="result" id="result">
-  <div class="drink-icon" id="drinkIcon"></div>
-  <div class="model-name" id="modelName"></div>
-  <div class="badge" id="badge"></div>
-  <div class="drink-name" id="drinkName"></div>
-  <p class="tagline" id="tagline"></p>
-  <p class="description" id="description"></p>
-  <div id="tags" style="margin-bottom:12px"></div>
-  
-<div class="btn-row">
-  <button class="ghost-btn" onclick="shareResult()">分享結果 📤</button>
-  <button class="ghost-btn" onclick="generateShareImage()">存成分享圖 🖼️</button>
-  <button class="ghost-btn why-btn" onclick="showWhyModal()">為什麼選它？ 🤔</button>
-</div>
-<!-- 將「再測一次」按鈕移出 .btn-row，使其單獨一行 -->
-<button class="restart-btn" onclick="restartQuiz()">再測一次</button>
-
-
-  <div class="legend">
-    <h3>🍹 新版 LLM 飲品全圖</h3>
-    <div class="grid">
-      <div class="item"><b>🧊☕ GPT-5-長文｜氮氣冷萃咖啡·長文</b> <br/>長文推理與程式能力強</div>
-      <div class="item"><b>🧊☕ GPT-5-多模態｜氮氣冷萃咖啡·多模態</b> <br/>多模態理解與代理執行</div>
-      <div class="item"><b>🔄 GPT-4o《返廠限定》｜冰火特調（回鍋版）</b> <br/>情緒價值高但請理性使用</div>
-      <div class="item season"><b>🍹 GPT-4o《初代·季節已過》｜冰火特調（經典版）</b> <br/>多模態強但偶有偏航</div>
-      <div class="item season"><b>🍸 GPT-4.5｜特調雞尾酒</b> <br/>語感圓潤、穩定輸出</div>
-      <div class="item season"><b>🥤 GPT-o3 系列｜能量飲料</b> <br/>推理穩、節奏慢</div>
-      <div class="item season"><b>🍹 GPT-4.1｜水果沙瓦</b> <br/>清爽快速、日常工具感</div>
-      <div class="item"><b>☕ Claude Haiku｜濾泡咖啡</b> <br/>輕快效率、小專案</div>
-      <div class="item"><b>☕ Claude Sonnet｜拿鐵</b> <br/>結構穩健、陪伴式任務</div>
-      <div class="item"><b>☕ Claude Opus｜濃縮咖啡</b> <br/>大專案、多層推理</div>
-      <div class="item"><b>🍵 Gemini｜養生茶</b> <br/>資料整合、超長上下文</div>
+    <!-- 起始畫面 -->
+    <div class="start-screen" id="startScreen">
+      <div class="start-icon">🧊☕️🍹🥤🍵</div>
+      <p style="font-size:16px;color:#4E3B31;margin-bottom:24px">
+        每個 AI 模型都有獨特的「語場風味」，<br>
+        透過 4 個問題，找出今天最對味的 AI 夥伴！
+      </p>
+      <button class="start-btn" onclick="startQuiz()">開始測驗</button>
     </div>
-    <div class="small">
-      ＊標註「季節已過」的模型仍可當作語場參考，但已不再提供新功能支援。<br>
-      🎯 專業提示：被某個AI『畢業』不是壞事，可能是你進步了！
+
+    <!-- 進度圓點 -->
+    <div class="progress" id="progress" style="display:none">
+      <div class="progress-dot" id="dot1"></div>
+      <div class="progress-dot" id="dot2"></div>
+      <div class="progress-dot" id="dot3"></div>
+      <div class="progress-dot" id="dot4"></div>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question-container" id="q1">
+      <div class="question">Q1. 今天你比較想要…</div>
+      <div class="options">
+        <button class="option" onclick="selectAnswer(1,'A')">🎨 刺激、有創意、有點不確定性</button>
+        <button class="option" onclick="selectAnswer(1,'B')">📐 穩定、有邏輯、有架構</button>
+        <button class="option" onclick="selectAnswer(1,'C')">⚡ 快速回應、輕量操作</button>
+        <button class="option" onclick="selectAnswer(1,'D')">🧠 深度推理、慢慢來</button>
+        <button class="option" onclick="selectAnswer(1,'E')">📚 查資料、整合資訊</button>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-container" id="q2">
+      <div class="question">Q2. 你的任務是…</div>
+      <div class="options">
+        <button class="option" onclick="selectAnswer(2,'1')">💡 創意發想、企劃點子、文案寫作</button>
+        <button class="option" onclick="selectAnswer(2,'2')">📝 長文案、規劃型內容、專案合作</button>
+        <button class="option" onclick="selectAnswer(2,'3')">🔄 翻譯、整理、快速生成</button>
+        <button class="option" onclick="selectAnswer(2,'4')">💻 技術／編碼／邏輯任務</button>
+        <button class="option" onclick="selectAnswer(2,'5')">📊 報告、事實查詢、找資料</button>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-container" id="q3">
+      <div class="question">Q3. 你今天的心情是…</div>
+      <div class="options">
+        <button class="option" onclick="selectAnswer(3,'spark')">🔸 想被 AI 激發、覺得可以挑戰</button>
+        <button class="option" onclick="selectAnswer(3,'focus')">🔹 想完成任務，不要拖太久</button>
+        <button class="option" onclick="selectAnswer(3,'quick')">🔺 想快結束、不想想太多</button>
+        <button class="option" onclick="selectAnswer(3,'deep')">🔻 想深入研究、沒關係花點時間</button>
+        <button class="option" onclick="selectAnswer(3,'stable')">🟩 想穩穩完成，風格無所謂</button>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-container" id="q4">
+      <div class="question">Q4. 需要 AI 幫忙理解圖片/影片/檔案嗎？</div>
+      <div class="options">
+        <button class="option" onclick="selectAnswer(4,'yes')">✅ 需要，圖片影片檔案都來！</button>
+        <button class="option" onclick="selectAnswer(4,'no')">❌ 不需要，文字就好</button>
+      </div>
+    </div>
+
+    <!-- 結果頁 -->
+    <div class="result" id="result">
+      <div class="drink-icon" id="drinkIcon"></div>
+      <div class="model-name" id="modelName"></div>
+      <div class="badge" id="badge"></div>
+      <div class="drink-name" id="drinkName"></div>
+      <p class="tagline" id="tagline"></p>
+      <p class="description" id="description"></p>
+      <div id="tags" style="margin-bottom:12px"></div>
+      
+      <div class="btn-row">
+        <button class="ghost-btn" onclick="shareResult()">分享結果 📤</button>
+        <button class="ghost-btn" onclick="generateShareImage()">存成分享圖 🖼️</button>
+        <button class="ghost-btn" onclick="showWhyModal()">為什麼選它？ 🤔</button>
+      </div>
+      <button class="restart-btn" onclick="restartQuiz()">再測一次</button>
+
+      <div class="legend">
+        <h3>🍹 新版 LLM 飲品全圖</h3>
+        <div class="grid">
+          <div class="item"><b>🧊☕ GPT-5-長文｜氮氣冷萃咖啡·長文</b> <br/>長文推理與程式能力強</div>
+          <div class="item"><b>🧊☕ GPT-5-多模態｜氮氣冷萃咖啡·多模態</b> <br/>多模態理解與代理執行</div>
+          <div class="item"><b>🔄 GPT-4o《返廠限定》｜冰火特調（回鍋版）</b> <br/>情緒價值高但請理性使用</div>
+          <div class="item season"><b>🍹 GPT-4o《初代·季節已過》｜冰火特調（經典版）</b> <br/>多模態強但偶有偏航</div>
+          <div class="item season"><b>🍸 GPT-4.5｜特調雞尾酒</b> <br/>語感圓潤、穩定輸出</div>
+          <div class="item season"><b>🥤 GPT-o3 系列｜能量飲料</b> <br/>推理穩、節奏慢</div>
+          <div class="item season"><b>🍹 GPT-4.1｜水果沙瓦</b> <br/>清爽快速、日常工具感</div>
+          <div class="item"><b>☕ Claude Haiku｜濾泡咖啡</b> <br/>輕快效率、小專案</div>
+          <div class="item"><b>☕ Claude Sonnet｜拿鐵</b> <br/>結構穩健、陪伴式任務</div>
+          <div class="item"><b>☕ Claude Opus｜濃縮咖啡</b> <br/>大專案、多層推理</div>
+          <div class="item"><b>🍵 Gemini｜養生茶</b> <br/>資料整合、超長上下文</div>
+        </div>
+        <div class="small">
+          ＊標註「季節已過」的模型仍可當作語場參考，但已不再提供新功能支援。<br>
+          🎯 專業提示：被某個AI『畢業』不是壞事，可能是你進步了！
+        </div>
+      </div>
     </div>
   </div>
-</div>
-```
 
-  </div>
-
-  <!-- Modal -->
-
+  <!-- Modal（確保在container外面） -->
   <div id="whyModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
@@ -523,11 +557,10 @@
   <script>
     let answers = {};
     let currentQuestion = 0;
-    let testHistory = []; // 記錄最近的結果 key，用於混合特調彩蛋
-    let previousFamily = null; // 用於畢業證書判斷
+    let testHistory = [];
+    let previousFamily = null;
     
     const results = {
-      // —— 新旗艦：GPT-5 兩種子風味 —— 
       'GPT5-LONG': {
         model:'GPT-5（長文偏重）', drink:'氮氣冷萃咖啡・長文',
         icon:'🧊☕', badge:'旗艦混合型', badgeType:'pro',
@@ -542,8 +575,6 @@
         description:'圖片/截圖/檔案理解 + 文字推理；適合把圖表、UI 截圖、PDF 與文字一起協作。💡分批釋出中，你是早鳥！',
         tags:['繪畫達人','資料達人','編碼達人']
       },
-      
-      // —— 雙4o版本（光明與黑暗）——
       'A-1-spark': {
         model:'GPT-4o《初代·季節已過》', drink:'冰火特調（經典版）', icon:'🍹',
         badge:'懷舊經典', badgeType:'season',
@@ -558,8 +589,6 @@
         description:'因用戶呼聲太高臨時返廠。溫暖依舊但請保持適當距離，隨時可能再次離開。建議：享受當下，但記得探索其他選項。',
         tags:['情緒支援', '請勿依賴', '限時供應']
       },
-      
-      // —— 混合特調彩蛋 ——
       'MIXED-SPECIAL': {
         model: '神秘調酒師特調',
         drink: '量子疊加特調',
@@ -570,8 +599,6 @@
         description: '你最近三次測出的結果全都不同！建議：創意用 GPT-5 多模態、規劃用 Claude Sonnet、快速任務用 Haiku，混合搭配最順口。',
         tags: ['全能達人', '混沌大師']
       },
-      
-      // —— 原有映射 ——
       'A-1-focus': {
         model:'GPT-4.1《季節已過》', drink:'水果沙瓦', icon:'🍹',
         badge:'經典款', badgeType:'classic',
@@ -616,7 +643,6 @@
       }
     };
 
-    // 家族特徵字典（為什麼選它功能）
     const familyTraits = {
       'GPT': {
         title: '選擇 GPT 家族的你可能是...',
