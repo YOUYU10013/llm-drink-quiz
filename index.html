@@ -694,7 +694,6 @@
     function selectAnswer(questionNum, answer) {
       answers[questionNum] = answer;
       document.getElementById(`q${questionNum}`).classList.remove('active');
-      // 更新進度點
       if (questionNum < 4) {
         setTimeout(() => {
           document.getElementById(`q${questionNum + 1}`).classList.add('active');
@@ -710,7 +709,6 @@
       document.getElementById('progress').style.display='none';
       const a1 = answers[1], a2 = answers[2], a3 = answers[3], a4 = answers[4];
 
-      // —— 先判斷是否進 GPT-5 區 —— 
       const wantsHybrid =
         (a1==='A' || a1==='B' || a1==='D') &&
         (a2==='1' || a2==='2' || a2==='4');
@@ -722,12 +720,10 @@
         else key = 'GPT5-LONG';
       }
 
-      // —— 特殊：4o返廠版判斷 ——
       if(!key && a1==='A' && a2==='1' && a3==='spark' && Math.random() > 0.5){
-        key = '4O-RETURNS'; // 50%機率出現返廠版
+        key = '4O-RETURNS';
       }
 
-      // —— 舊映射（維持原邏輯）——
       if(!key && a1==='A' && a2==='1'){ key = (a3==='spark' ? 'A-1-spark' : 'A-1-focus'); }
       else if(!key && a1==='B' && a2==='2'){ key = (a3==='deep' ? 'B-2-deep' : 'B-2-focus'); }
       else if(!key && a1==='C' && a2==='3'){ key = 'C-3-quick'; }
@@ -735,7 +731,6 @@
       else if(!key && a1==='E' && a2==='5'){ key = 'E-5-stable'; }
       else if(!key && a1==='B' && a2==='4'){ key = 'B-4-focus'; }
 
-      // —— 預設回退 ——
       if(!key){
         if (a2==='2' || a2==='4') key = 'GPT5-LONG';
         else if (a3==='spark' || a3==='quick') key = 'A-1-spark';
@@ -744,7 +739,6 @@
         else key = 'B-2-focus';
       }
 
-      // —— 混合特調彩蛋：最近三次都不同就觸發 ——  
       if (key) testHistory.push(key);
       if (testHistory.length >= 3) {
         const recent3 = testHistory.slice(-3);
@@ -754,14 +748,12 @@
         }
       }
 
-      // —— 畢業證書彩蛋：從GPT到Claude ——
       const currentFamily = getFamily(results[key].model);
       if (previousFamily === 'GPT' && currentFamily === 'Claude') {
         setTimeout(showGraduationCertificate, 1000);
       }
       previousFamily = currentFamily;
 
-      // —— 4o返廠版特殊提醒 ——
       if (key === '4O-RETURNS') {
         setTimeout(() => {
           alert('💡 溫馨提醒：4o隨時可能調整，建議您也試試其他模型喔！');
@@ -796,7 +788,6 @@
       document.querySelectorAll('.question-container').forEach(container => container.classList.remove('active'));
     }
 
-    // 分享功能
     function shareResult(){
       const model = document.getElementById('modelName').textContent;
       const drink = document.getElementById('drinkName').textContent;
@@ -820,51 +811,41 @@ ${tagline}
       }
     }
 
-    // 生成分享圖
     function generateShareImage(){
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       const W = 800, H = 1200;
       canvas.width = W; canvas.height = H;
 
-      // 背景
       ctx.fillStyle = '#F0E5D8';
       ctx.fillRect(0,0,W,H);
 
-      // 標題
       ctx.fillStyle = '#5D4037';
       ctx.font = 'bold 44px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText('我的 AI 飲品', W/2, 80);
 
-      // 飲品 icon
       ctx.font = '180px sans-serif';
       ctx.fillText(document.getElementById('drinkIcon').textContent, W/2, 260);
 
-      // 模型名稱
       ctx.fillStyle = '#5D4037';
       ctx.font = 'bold 40px sans-serif';
       ctx.fillText(document.getElementById('modelName').textContent, W/2, 330);
 
-      // 飲品名稱
       ctx.fillStyle = '#7D5A4C';
       ctx.font = '28px sans-serif';
       ctx.fillText(document.getElementById('drinkName').textContent, W/2, 370);
 
-      // tagline
       const tagline = document.getElementById('tagline').textContent;
       drawWrapped(ctx, tagline, W/2, 430, 620, 34, '#B07D62', '600 28px sans-serif');
 
-      // 描述
       const desc = document.getElementById('description').textContent;
       drawWrapped(ctx, desc, W/2, 560, 660, 42, '#5D4037', '400 26px sans-serif');
 
-      // 底部網址
       ctx.fillStyle = '#7D5A4C';
       ctx.font = '600 26px sans-serif';
       ctx.fillText('youyu10013.github.io/llm-drink-quiz', W/2, H-60);
 
-      // 下載
       canvas.toBlob(b=>{
         const url = URL.createObjectURL(b);
         const a = document.createElement('a');
@@ -886,7 +867,6 @@ ${tagline}
       }
     }
 
-    // 判斷家族
     function getFamily(modelName) {
       if (modelName.includes('GPT')) return 'GPT';
       if (modelName.includes('Claude')) return 'Claude';
@@ -894,31 +874,28 @@ ${tagline}
       return null;
     }
 
-    // 顯示「為什麼選它」Modal
-function showWhyModal() {
-  const modelName = document.getElementById('modelName').textContent;
-  const family = getFamily(modelName);
-  if (!family || !familyTraits[family]) return;  // 若沒有對應資料則不顯示
-  const traits = familyTraits[family];
-  // 設定 Modal 標題和內容
-  document.getElementById('modalTitle').textContent = traits.title;
-  document.getElementById('modalBody').innerHTML = `
-    <ul class="trait-list">
-      ${traits.traits.map(t => `<li>${t}</li>`).join('')}
-    </ul>
-    <div class="modal-footer">${traits.footer}</div>
-  `;
-  // 顯示 Modal
-  document.getElementById('whyModal').style.display = 'block';
-}
+    function showWhyModal() {
+      const modelName = document.getElementById('modelName').textContent;
+      const family = getFamily(modelName);
+      
+      if (!family || !familyTraits[family]) return;
+      
+      const traits = familyTraits[family];
+      document.getElementById('modalTitle').textContent = traits.title;
+      document.getElementById('modalBody').innerHTML = `
+        <ul class="trait-list">
+          ${traits.traits.map(t => `<li>${t}</li>`).join('')}
+        </ul>
+        <div class="modal-footer">${traits.footer}</div>
+      `;
+      
+      document.getElementById('whyModal').style.display = 'block';
+    }
 
-
-    // 關閉Modal
     function closeModal() {
       document.getElementById('whyModal').style.display = 'none';
     }
 
-    // 點擊外部關閉
     window.onclick = function(event) {
       const modal = document.getElementById('whyModal');
       if (event.target == modal) {
@@ -926,7 +903,6 @@ function showWhyModal() {
       }
     }
 
-    // 畢業證書
     function showGraduationCertificate() {
       const cert = document.createElement('div');
       cert.className = 'certificate';
@@ -940,6 +916,5 @@ function showWhyModal() {
       document.body.appendChild(cert);
     }
   </script>
-
 </body>
 </html>
