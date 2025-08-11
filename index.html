@@ -786,11 +786,12 @@ h1 {
       'Gemini': {
         title: '選擇 Gemini 的你可能是...',
         traits: [
-          'Google 全家桶愛好者',
+          '衣櫃裡全是Google的全家桶，出門必帶Workspace三件套',
           '喜歡超長上下文（100萬 tokens！）',
           '查資料整合的實用主義者',
-          '不在意個性，只要結果正確',
-          '享受免費額度的理性用戶',
+          '比起情緒價值，更在乎事實查核的實習生。',
+          '天生就是多模態，看圖聽影片就像喝水一樣自然',
+          'DeepMind 的忠實粉絲，Alpha之力',
           '偶爾驚豔，經常平淡'
         ],
         footer: '《我很溫和，但我很有用，google我大哥!》🍵'
@@ -858,8 +859,8 @@ h1 {
         const recent3 = testHistory.slice(-3);
         const unique = new Set(recent3);
         if (unique.size === 3) {
-          // 10% 機率觸發 Grok 黑洞彩蛋
-          if (Math.random() < 0.1) {
+          // 30%機率觸發 Grok 黑洞彩蛋
+          if (Math.random() < 0.3) {
             setTimeout(showGrokSurprise, 500);
             key = 'GROK-SPECIAL';
           } else {
