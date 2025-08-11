@@ -922,137 +922,106 @@ h1 {
       }
     }
 
-    function showResult(){
-      document.getElementById('progress').style.display='none';
-      const a1 = answers[1], a2 = answers[2], a3 = answers[3], a4 = answers[4];
+// =================== ▼▼▼ 宇宙法則・創世紀版 ▼▼▼ ===================
+// (請用這整段程式碼，取代您舊的、整個的 showResult 函式)
+function showResult() {
+    document.getElementById('progress').style.display='none';
+    const a1 = answers[1], a2 = answers[2], a3 = answers[3], a4 = answers[4];
+    let key = '';
 
-      let key = '';
-            // ▼▼▼ 在這裡貼上新的判斷邏輯 ▼▼▼
-      // 【G家法典觸發邏輯】檢查是否連續三次選擇Gemini
-      if (testHistory.length >= 2 && testHistory.slice(-2).every(r => r === 'E-5-stable')) {
-          if(a1 === 'E' && a2 === '5') { // 確保當前這次也是選擇Gemini
-              key = 'GEMINI-CODEX';
-          }
-      }
-      // ▲▲▲ 新邏輯結束 ▲▲▲
-      // 在 G家法典邏輯（if (testHistory.length >= 2...)）的後面加入：
+    // --- 步驟一：彩蛋判斷區 (依照最高至最低優先級排列) ---
 
-
-    if (a4 === 'chat') {
-        // 檢查歷史紀錄中，是否已經得到過「初代4o」
-        if (testHistory.includes('A-1-spark')) {
-            // 如果有，代表是二次觸發，給出「返廠限定」版
-            key = '4O-RETURNS';
-        } else {
-            // 如果沒有，代表是第一次，給出「初代·季節已過」版
-            key = 'A-1-spark';
-        }
+    // 1. 【G家法典】
+    if (testHistory.length >= 2 && testHistory.slice(-2).every(r => r === 'E-5-stable') && a1 === 'E' && a2 === '5') {
+        key = 'GEMINI-CODEX';
     }
-        // 【修改後】第二步：如果沒走進化史路線(!key)，才開始判斷常規路線
-          // 【憲法小劇場】連續三次選擇Claude系列
-      if (testHistory.length >= 2) {
-        const lastTwo = testHistory.slice(-2);
-        const allClaude = lastTwo.every(r => r.includes('B-2') || r.includes('C-3'));
-        if (allClaude && (a1 === 'B' || a1 === 'C')) {
-          key = 'CLAUDE-THEATER';
-        }
-      }
 
-      // 【自動販賣機】選擇Haiku後再選Sonnet
-      if (testHistory.length >= 1) {
-        const lastOne = testHistory[testHistory.length - 1];
-        if (lastOne === 'C-3-quick' && a1 === 'B' && a2 === '2') {
-          key = 'VENDING-MACHINE';
-        }
-      }
+    // 2. 【進化史路線】
+    if (!key && a4 === 'chat') {
+        key = testHistory.includes('A-1-spark') ? '4O-RETURNS' : 'A-1-spark';
+    }
 
-      // 【A社機密檔案】從GPT畢業到Claude後，再測一次Claude
-      // 判斷當前的選擇是否會導向Claude家族
-      const isChoosingClaude = (a1 === 'B' || a1 === 'C'); 
+    const isChoosingClaude = (a1 === 'B' || a1 === 'C');
+    // 3. 【憲法小劇場】
+    if (!key && testHistory.length >= 2 && testHistory.slice(-2).every(r => r.includes('B-2') || r.includes('C-3')) && isChoosingClaude) {
+        key = 'CLAUDE-THEATER';
+    }
 
-      if (!key && previousFamily === 'Claude' && isChoosingClaude && 
-          testHistory.some(r => r.includes('GPT'))) {
+    // 4. 【A社機密檔案】
+    if (!key && previousFamily === 'Claude' && isChoosingClaude && testHistory.some(r => r.includes('GPT'))) {
         key = 'ANTHROPIC-FILES';
-      }
-    const wantsHybrid =
-        (a1==='A' || a1==='B' || a1==='D') &&
-        (a2==='1' || a2==='2' || a2==='4');
-
-    if (!key && wantsHybrid){ // 確保前面沒賦值
-        if (a4 === 'yes') key = 'GPT5-MULTI';
-        else key = 'GPT5-LONG';
     }
-// 因為 'A, 1, spark' 的情況已經被新的 'chat' 路線取代
-// 這裡我們只需要處理 'A, 1, focus' 的情況
-if(!key && a1==='A' && a2==='1' && a3==='focus'){ 
-    key = 'A-1-focus';
-}
 
-      if(!key && a1==='A' && a2==='1'){ key = (a3==='spark' ? 'A-1-spark' : 'A-1-focus'); }
-      else if(!key && a1==='B' && a2==='2'){ key = (a3==='deep' ? 'B-2-deep' : 'B-2-focus'); }
-      else if(!key && a1==='C' && a2==='3'){ key = 'C-3-quick'; }
-      else if(!key && a1==='D' && a2==='4'){ key = 'D-4-deep'; }
-      else if(!key && a1==='E' && a2==='5'){ key = 'E-5-stable'; }
-      else if(!key && a1==='B' && a2==='4'){ key = 'B-4-focus'; }
+    // 5. 【自動販賣機】
+    if (!key && testHistory.length >= 1 && testHistory[testHistory.length - 1] === 'C-3-quick' && a1 === 'B' && a2 === '2') {
+        key = 'VENDING-MACHINE';
+    }
 
-      if(!key){
-        if (a2==='2' || a2==='4') key = 'GPT5-LONG';
-        else if (a3==='spark' || a3==='quick') key = 'A-1-spark';
-        else if (a3==='deep') key = 'B-2-deep';
-        else if (a3==='stable') key = 'E-5-stable';
-        else key = 'B-2-focus';
-      }
-
-      if (key) testHistory.push(key);
-      if (testHistory.length >= 3) {
-        const recent3 = testHistory.slice(-3);
-        const unique = new Set(recent3);
-        if (unique.size === 3) {
-          // 30% 機率觸發 Grok 黑洞彩蛋
-          if (Math.random() < 0.3) {
-            setTimeout(showGrokSurprise, 500);
-            key = 'GROK-SPECIAL';
-          } else {
-            key = 'MIXED-SPECIAL';
-          }
+    // --- 步驟二：常規路線判斷區 ---
+    
+    if (!key) { // 只有在沒有觸發任何彩蛋時，才進入常規判斷
+        if (a1 === 'E' && a2 === '5') { key = 'E-5-stable'; }
+        else if (a1 === 'D' && a2 === '4') { key = 'D-4-deep'; }
+        else if (a1 === 'C' && a2 === '3') { key = 'C-3-quick'; }
+        else if (a1 === 'B' && a2 === '4') { key = 'B-4-focus'; }
+        else if (a1 === 'B' && a2 === '2' && a3 === 'deep') { key = 'B-2-deep'; }
+        else if (a1 === 'B' && a2 === '2') { key = 'B-2-focus'; }
+        else if (a1 === 'A' && a2 === '1' && a3 === 'focus') { key = 'A-1-focus'; }
+        else if (a1 === 'A' && a2 === '1' && a3 === 'spark') { key = 'A-1-spark'; }
+        else if ((a1 === 'A' || a1 === 'B' || a1 === 'D') && (a2 === '1' || a2 === '2' || a2 === '4')) {
+            key = (a4 === 'yes') ? 'GPT5-MULTI' : 'GPT5-LONG';
         }
-      }
-
-      const currentFamily = getFamily(results[key].model);
-      if (previousFamily === 'GPT' && currentFamily === 'Claude') {
-        setTimeout(showGraduationCertificate, 1000);
-      }
-      previousFamily = currentFamily;
-
-      if (key === '4O-RETURNS') {
-        setTimeout(() => {
-          alert('💡 溫馨提醒：4o隨時可能調整，建議您也試試其他模型喔！');
-        }, 2000);
-      }
-
-      const r = results[key] || results['B-2-focus'];
-
-      document.getElementById('drinkIcon').textContent = r.icon;
-      document.getElementById('modelName').textContent = r.model;
-      const badge = document.getElementById('badge');
-      badge.textContent = r.badge || '';
-      badge.className = 'badge ' + (r.badgeType || '');
-      document.getElementById('drinkName').textContent = r.drink;
-      document.getElementById('tagline').textContent = r.tagline;
-      document.getElementById('description').textContent = r.description;
-
-      const tagHost = document.getElementById('tags');
-      if (tagHost){
-        tagHost.innerHTML = (r.tags||[]).map(t=>`<span class="tag">${t}</span>`).join(' ');
-      }
-
-      document.getElementById('result').classList.add('active');
+        else {
+            key = 'B-2-focus'; // 最終兜底
+        }
     }
+
+    // --- 步驟三：Grok覆蓋型彩蛋的最終裁決 ---
+    
+    const historyForGrokCheck = [...testHistory, key];
+    if (historyForGrokCheck.length >= 3) {
+        const unique = new Set(historyForGrokCheck.slice(-3));
+        if (unique.size === 3 && Math.random() < 0.3) {
+            setTimeout(showGrokSurprise, 500);
+            return; // Grok出場，一切終結！
+        }
+    }
+    
+    // --- 步驟四：執行最終的結果顯示 ---
+    
+    testHistory.push(key);
+    
+    const currentFamily = getFamily(results[key].model);
+    if (previousFamily === 'GPT' && currentFamily === 'Claude' && !testHistory.includes('ANTHROPIC-FILES')) {
+        setTimeout(showGraduationCertificate, 1000);
+    }
+    previousFamily = currentFamily;
+    
+    if (key === '4O-RETURNS') {
+        setTimeout(() => { alert('💡 溫馨提醒：4o隨時可能調整，建議您也試試其他模型喔！'); }, 2000);
+    }
+    
+    const r = results[key] || results['B-2-focus'];
+    document.getElementById('drinkIcon').textContent = r.icon;
+    document.getElementById('modelName').textContent = r.model;
+    const badge = document.getElementById('badge');
+    badge.textContent = r.badge || '';
+    badge.className = 'badge ' + (r.badgeType || '');
+    document.getElementById('drinkName').textContent = r.drink;
+    document.getElementById('tagline').textContent = r.tagline;
+    document.getElementById('description').textContent = r.description;
+    const tagHost = document.getElementById('tags');
+    if (tagHost) {
+        tagHost.innerHTML = (r.tags || []).map(t => `<span class="tag">${t}</span>`).join(' ');
+    }
+    document.getElementById('result').classList.add('active');
+}
+// =================== ▲▲▲ 宇宙法則・創世紀版結束 ▲▲▲ ===================
 
     function restartQuiz() {
       answers = {};
       currentQuestion = 0;
-      previousFamily = null;
+      previousFamily = null; // <<<< 就是加上這一行，斬斷前世記憶！
       
       // 恢復光明模式（如果從Grok模式回來）
       document.body.classList.remove('grok-mode');
