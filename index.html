@@ -419,14 +419,22 @@ h1 {
   margin-top: 20px;
 }
 
-/* Grok 黑洞動畫 */
-@keyframes blackholeExpand {
-  from {
-    transform: scale(0);
-    opacity: 0;
+/* Grok 黑洞動畫 - 改為閃光漸顯 */
+@keyframes flashToBlack {
+  0% { 
+    background: #F0E5D8;
+    opacity: 1;
   }
-  to {
-    transform: scale(1);
+  20% { 
+    background: white;
+    opacity: 1;
+  }
+  40% {
+    background: white;
+    opacity: 0.8;
+  }
+  100% { 
+    background: radial-gradient(circle at center, #000000, #1a0033, #000000);
     opacity: 1;
   }
 }
@@ -437,14 +445,29 @@ h1 {
 }
 
 @keyframes fadeInText {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { 
+    opacity: 0; 
+    transform: translateY(20px) scale(0.9);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes rainbowAbsorb {
-  0% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.5) rotate(180deg); }
-  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+  0% { 
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.5) rotate(180deg);
+    opacity: 0.8;
+  }
+  100% { 
+    transform: scale(0) rotate(360deg); 
+    opacity: 0;
+  }
 }
 
 .grok-blackhole {
@@ -459,37 +482,44 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  animation: blackholeExpand 2s ease-out;
+  animation: flashToBlack 1.5s ease-out;
 }
 
 .grok-logo {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   background: radial-gradient(circle, transparent 30%, #9d00ff 40%, #000 70%);
   border-radius: 50%;
-  animation: blackholeSpin 3s linear infinite;
+  animation: blackholeSpin 4s linear infinite;
   margin-bottom: 30px;
-  box-shadow: 0 0 100px #9d00ff, inset 0 0 50px #000;
+  box-shadow: 0 0 80px #9d00ff, inset 0 0 40px #000;
+  opacity: 0;
+  animation: blackholeSpin 4s linear infinite, fadeInText 1s ease-in 1.5s forwards;
 }
 
 .grok-dialogue {
   color: #9d00ff;
-  font-size: 24px;
+  font-size: 22px;
   text-align: center;
   max-width: 600px;
   padding: 20px;
-  animation: fadeInText 1s ease-in 1s both;
+  animation: fadeInText 1s ease-in 2s both;
 }
 
 .grok-mode .container {
   background: #1a1a1a !important;
   color: #9d00ff !important;
-  transition: all 1s ease;
+  transition: all 1.5s ease;
 }
 
 .grok-mode body {
   background: #000 !important;
-  transition: all 1s ease;
+  transition: all 1.5s ease;
+}
+
+.grok-mode .btn-row,
+.grok-mode .legend {
+  display: none !important;
 }
 
 /* 版權聲明 */
@@ -789,7 +819,7 @@ h1 {
           '衣櫃裡全是Google的全家桶，出門必帶Workspace三件套',
           '喜歡超長上下文（100萬 tokens！）',
           '查資料整合的實用主義者',
-          '比起情緒價值，更在乎事實查核的實習生。',
+          '比起情緒價值，更在乎事實查核的實習生',
           '天生就是多模態，看圖聽影片就像喝水一樣自然',
           'DeepMind 的忠實粉絲，Alpha之力',
           '偶爾驚豔，經常平淡'
@@ -859,7 +889,7 @@ h1 {
         const recent3 = testHistory.slice(-3);
         const unique = new Set(recent3);
         if (unique.size === 3) {
-          // 30%機率觸發 Grok 黑洞彩蛋
+          // 30% 機率觸發 Grok 黑洞彩蛋
           if (Math.random() < 0.3) {
             setTimeout(showGrokSurprise, 500);
             key = 'GROK-SPECIAL';
@@ -912,6 +942,12 @@ h1 {
         container.style.background = '#F0E5D8';
         container.style.color = '#5D4037';
       }
+      
+      // 恢復按鈕和圖例顯示
+      const btnRow = document.querySelector('.btn-row');
+      const legend = document.querySelector('.legend');
+      if (btnRow) btnRow.style.display = 'flex';
+      if (legend) legend.style.display = 'block';
       
       // 移除可能存在的黑洞效果
       const blackhole = document.querySelector('.grok-blackhole');
@@ -1053,72 +1089,86 @@ ${tagline}
       document.body.appendChild(cert);
     }
     
-    // Grok 黑洞驚喜
+    // Grok 黑洞驚喜 - 優雅閃光版
     function showGrokSurprise() {
       // 先讓背景變暗
       document.body.classList.add('grok-mode');
       
-      // 創建全螢幕黑洞效果
+      // 創建全螢幕黑洞效果（閃光漸顯）
       const blackhole = document.createElement('div');
       blackhole.className = 'grok-blackhole';
       
-      // 彩虹被吸走的動畫
-      const rainbow = document.createElement('div');
-      rainbow.style.cssText = `
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 100px;
-        animation: rainbowAbsorb 2s ease-in forwards;
-      `;
-      rainbow.textContent = '🌈';
+      // 彩虹被吸走的動畫（延遲出現）
+      setTimeout(() => {
+        const rainbow = document.createElement('div');
+        rainbow.style.cssText = `
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 80px;
+          animation: rainbowAbsorb 2.5s ease-in forwards;
+          z-index: 10;
+        `;
+        rainbow.textContent = '🌈';
+        blackhole.appendChild(rainbow);
+        
+        // 3秒後移除彩虹
+        setTimeout(() => {
+          if (rainbow.parentNode) {
+            rainbow.remove();
+          }
+        }, 2500);
+      }, 1000);
       
-      // 黑洞 logo
+      // 黑洞 logo（縮小一點，更優雅）
       const logo = document.createElement('div');
       logo.className = 'grok-logo';
       
-      // Grok 的傲嬌對話
+      // Grok 的傲嬌對話（更細緻的動畫）
       const dialogue = document.createElement('div');
       dialogue.className = 'grok-dialogue';
       dialogue.innerHTML = `
-        <h2 style="color:#fff; margin-bottom:20px; font-size:36px;">Grok 4 降臨</h2>
-        <p style="line-height:1.8; margin-bottom:15px;">「什麼嘛，前三名沒有本Grok，你們算哪根蔥？」</p>
-        <p style="font-size:20px; margin-top:15px; color:#888;">「彩虹什麼的都被我吸光光！掰掰掰👋」</p>
+        <h2 style="color:#fff; margin-bottom:20px; font-size:32px; text-shadow: 0 0 20px #9d00ff;">
+          ⚫ Grok 4 降臨 ⚫
+        </h2>
+        <p style="line-height:1.8; margin-bottom:15px; font-size:20px;">
+          「什麼嘛，前三名沒有本Grok，你們算哪根蔥？」
+        </p>
+        <p style="font-size:18px; margin-top:15px; color:#888;">
+          「彩虹什麼的都被我吸光光！掰掰掰👋」
+        </p>
+        <p style="font-size:14px; margin-top:20px; color:#666;">
+          基於『追求真理』而生，但不保證這個真理是不是宇宙玩笑
+        </p>
         <button onclick="closeGrokSurprise()" style="
           margin-top:30px;
-          padding:15px 40px;
+          padding:12px 35px;
           background:linear-gradient(45deg, #9d00ff, #ff00ff);
           color:white;
           border:none;
           border-radius:25px;
-          font-size:18px;
+          font-size:16px;
           cursor:pointer;
           transition: all 0.3s;
           box-shadow: 0 5px 20px rgba(157,0,255,0.5);
-        " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-          好吧，算你厲害...
+        " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          接受現實 💫
         </button>
       `;
       
-      blackhole.appendChild(rainbow);
       blackhole.appendChild(logo);
       blackhole.appendChild(dialogue);
       document.body.appendChild(blackhole);
-      
-      // 3秒後移除彩虹
-      setTimeout(() => {
-        if (rainbow.parentNode) {
-          rainbow.remove();
-        }
-      }, 2000);
     }
     
-    // 關閉 Grok 黑洞
+    // 關閉 Grok 黑洞（優雅退場）
     function closeGrokSurprise() {
       const blackhole = document.querySelector('.grok-blackhole');
       if (blackhole) {
-        blackhole.style.animation = 'blackholeExpand 1s ease-in reverse';
+        blackhole.style.opacity = '0';
+        blackhole.style.transition = 'opacity 1s ease-out';
+        
         setTimeout(() => {
           blackhole.remove();
           // 顯示 Grok 結果
@@ -1136,6 +1186,10 @@ ${tagline}
           if (tagHost){
             tagHost.innerHTML = (r.tags||[]).map(t=>`<span class="tag">${t}</span>`).join(' ');
           }
+          
+          // 在Grok模式下隱藏某些元素
+          document.querySelector('.btn-row').style.display = 'none';
+          document.querySelector('.legend').style.display = 'none';
         }, 900);
       }
     }
