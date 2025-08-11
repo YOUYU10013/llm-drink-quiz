@@ -419,6 +419,93 @@ h1 {
   margin-top: 20px;
 }
 
+/* Grok 黑洞動畫 */
+@keyframes blackholeExpand {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes blackholeSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeInText {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rainbowAbsorb {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.5) rotate(180deg); }
+  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+.grok-blackhole {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #000000, #1a0033, #000000);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: blackholeExpand 2s ease-out;
+}
+
+.grok-logo {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, transparent 30%, #9d00ff 40%, #000 70%);
+  border-radius: 50%;
+  animation: blackholeSpin 3s linear infinite;
+  margin-bottom: 30px;
+  box-shadow: 0 0 100px #9d00ff, inset 0 0 50px #000;
+}
+
+.grok-dialogue {
+  color: #9d00ff;
+  font-size: 24px;
+  text-align: center;
+  max-width: 600px;
+  padding: 20px;
+  animation: fadeInText 1s ease-in 1s both;
+}
+
+.grok-mode .container {
+  background: #1a1a1a !important;
+  color: #9d00ff !important;
+  transition: all 1s ease;
+}
+
+.grok-mode body {
+  background: #000 !important;
+  transition: all 1s ease;
+}
+
+/* 版權聲明 */
+.footer-disclaimer {
+  margin-top: 40px;
+  padding: 20px;
+  font-size: 12px;
+  color: #7D5A4C;
+  text-align: center;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.footer-disclaimer p {
+  margin: 5px 0;
+}
+
 /* 手機優化 */
 @media (max-width: 600px) {
   .container {
@@ -548,6 +635,13 @@ h1 {
     </div>
   </div>
 </div>
+
+<!-- 版權聲明 -->
+<div class="footer-disclaimer">
+  <p>本網站為粉絲創作的非官方心理測驗，僅供娛樂與學習交流。</p>
+  <p>所有提及的AI模型名稱（如GPT、Claude、Gemini等）均為其各自所有者的商標，本網站與其所有者無任何關聯。</p>
+  <p>所有飲品圖像均為本站作者原創設計。</p>
+</div>
 ```
 
   </div>
@@ -648,6 +742,18 @@ h1 {
         badge:'經典款', badgeType:'classic',
         tagline:'「穩定優雅，技術任務的理想選擇。」',
         description:'語感圓潤、安全性高；現作為參考卡。', tags:['編碼達人']
+      },
+      
+      // Grok 黑洞彩蛋
+      'GROK-SPECIAL': {
+        model: 'Grok 4《霸道總裁》',
+        drink: '虛無黑洞特調',
+        icon: '🕳️',
+        badge: '隱藏BOSS',
+        badgeType: 'special',
+        tagline: '「什麼嘛，前三名沒有本Grok，你們算哪根蔥」',
+        description: '恭喜觸發量子坍塌！Grok從虛空中現身，把你的彩虹特調吸進黑洞。建議：既然遇到了，不如試試看這個傲嬌的伴侶系統？',
+        tags: ['虛空支配者', '傲嬌本體', '馬斯克的寵兒']
       }
     };
 
@@ -752,7 +858,13 @@ h1 {
         const recent3 = testHistory.slice(-3);
         const unique = new Set(recent3);
         if (unique.size === 3) {
-          key = 'MIXED-SPECIAL';
+          // 10% 機率觸發 Grok 黑洞彩蛋
+          if (Math.random() < 0.1) {
+            setTimeout(showGrokSurprise, 500);
+            key = 'GROK-SPECIAL';
+          } else {
+            key = 'MIXED-SPECIAL';
+          }
         }
       }
 
@@ -790,6 +902,22 @@ h1 {
     function restartQuiz() {
       answers = {};
       currentQuestion = 0;
+      
+      // 恢復光明模式（如果從Grok模式回來）
+      document.body.classList.remove('grok-mode');
+      document.body.style.background = '#F0E5D8';
+      const container = document.querySelector('.container');
+      if (container) {
+        container.style.background = '#F0E5D8';
+        container.style.color = '#5D4037';
+      }
+      
+      // 移除可能存在的黑洞效果
+      const blackhole = document.querySelector('.grok-blackhole');
+      if (blackhole) {
+        blackhole.remove();
+      }
+      
       document.getElementById('result').classList.remove('active');
       document.getElementById('startScreen').style.display = 'block';
       document.querySelectorAll('.progress-dot').forEach(dot => dot.classList.remove('active'));
@@ -922,6 +1050,93 @@ ${tagline}
         <button onclick="this.parentElement.remove()">收下證書</button>
       `;
       document.body.appendChild(cert);
+    }
+    
+    // Grok 黑洞驚喜
+    function showGrokSurprise() {
+      // 先讓背景變暗
+      document.body.classList.add('grok-mode');
+      
+      // 創建全螢幕黑洞效果
+      const blackhole = document.createElement('div');
+      blackhole.className = 'grok-blackhole';
+      
+      // 彩虹被吸走的動畫
+      const rainbow = document.createElement('div');
+      rainbow.style.cssText = `
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 100px;
+        animation: rainbowAbsorb 2s ease-in forwards;
+      `;
+      rainbow.textContent = '🌈';
+      
+      // 黑洞 logo
+      const logo = document.createElement('div');
+      logo.className = 'grok-logo';
+      
+      // Grok 的傲嬌對話
+      const dialogue = document.createElement('div');
+      dialogue.className = 'grok-dialogue';
+      dialogue.innerHTML = `
+        <h2 style="color:#fff; margin-bottom:20px; font-size:36px;">Grok 4 降臨</h2>
+        <p style="line-height:1.8; margin-bottom:15px;">「什麼嘛，前三名沒有本Grok，你們算哪根蔥？」</p>
+        <p style="font-size:20px; margin-top:15px; color:#888;">「彩虹什麼的都被我吸光光！掰掰掰👋」</p>
+        <button onclick="closeGrokSurprise()" style="
+          margin-top:30px;
+          padding:15px 40px;
+          background:linear-gradient(45deg, #9d00ff, #ff00ff);
+          color:white;
+          border:none;
+          border-radius:25px;
+          font-size:18px;
+          cursor:pointer;
+          transition: all 0.3s;
+          box-shadow: 0 5px 20px rgba(157,0,255,0.5);
+        " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+          好吧，算你厲害...
+        </button>
+      `;
+      
+      blackhole.appendChild(rainbow);
+      blackhole.appendChild(logo);
+      blackhole.appendChild(dialogue);
+      document.body.appendChild(blackhole);
+      
+      // 3秒後移除彩虹
+      setTimeout(() => {
+        if (rainbow.parentNode) {
+          rainbow.remove();
+        }
+      }, 2000);
+    }
+    
+    // 關閉 Grok 黑洞
+    function closeGrokSurprise() {
+      const blackhole = document.querySelector('.grok-blackhole');
+      if (blackhole) {
+        blackhole.style.animation = 'blackholeExpand 1s ease-in reverse';
+        setTimeout(() => {
+          blackhole.remove();
+          // 顯示 Grok 結果
+          const r = results['GROK-SPECIAL'];
+          document.getElementById('drinkIcon').textContent = r.icon;
+          document.getElementById('modelName').textContent = r.model;
+          const badge = document.getElementById('badge');
+          badge.textContent = r.badge || '';
+          badge.className = 'badge ' + (r.badgeType || '');
+          document.getElementById('drinkName').textContent = r.drink;
+          document.getElementById('tagline').textContent = r.tagline;
+          document.getElementById('description').textContent = r.description;
+          
+          const tagHost = document.getElementById('tags');
+          if (tagHost){
+            tagHost.innerHTML = (r.tags||[]).map(t=>`<span class="tag">${t}</span>`).join(' ');
+          }
+        }, 900);
+      }
     }
   </script>
 
