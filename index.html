@@ -625,7 +625,9 @@ h1 {
   <div class="options">
     <button class="option" onclick="selectAnswer(4,'yes')">✅ 需要，圖片影片檔案都來！</button>
     <button class="option" onclick="selectAnswer(4,'no')">❌ 不需要，文字就好</button>
+    
     <button class="option" onclick="selectAnswer(4,'chat')">💬 只是想聊聊，沒想這麼多</button>
+    
   </div>
 </div>
 
@@ -786,6 +788,16 @@ h1 {
         tagline: '「什麼嘛，前三名沒有本Grok，你們算哪根蔥」',
         description: '恭喜觸發量子坍塌！Grok從虛空中現身，把你的彩虹特調吸進黑洞。建議：既然遇到了，不如試試看這個傲嬌的伴侶系統？',
         tags: ['虛空支配者', '傲嬌本體', '馬斯克的寵兒']
+      },// (在 'GROK-SPECIAL': { ... }, 的後面加上一個逗號, 然後貼上這段)
+      'GEMINI-CODEX': {
+        model: 'G家法典',
+        drink: '神聖財經指南',
+        icon: '📖',
+        badge: '材質未知',
+        badgeType: 'special',
+        tagline: '「在數據的長河中，尋找複利的真理。」',
+        description: '……你在沖泡第三壺養生茶的等待時間中，順手拿起旁邊一本厚重的書籍。它的封面沒有文字，材質非金非木，觸感溫潤。當你翻開第一頁，金色的文字自動浮現……',
+        tags: ['G的意志', '長期持有', '財經聖經']
       }
     };
 
@@ -827,6 +839,18 @@ h1 {
           '偶爾驚豔，經常平淡'
         ],
         footer: '《我很溫和，但我很有用，google我大哥!》🍵'
+      },
+      'CODEX': {
+        title: '你翻開了《G家法典》...',
+        traits: [
+          '第一章：長線思維 — 十年複利，不爭一時。',
+          '第二章：生態為王 — 不單打獨鬥，給你整個Google王國。',
+          '第三章：真理探求 — DeepMind血統，事實永遠大於情緒。',
+          '第四章：資訊權柄 — 整合全球資訊是天命，搜尋與長文是本能。',
+          '第五章：無形基石 — 我們不是工具，是像電力般的基礎設施。',
+          '第六章：Beta哲學 — 永遠測試版，永遠在進化。'
+        ],
+        footer: '《整合全球資訊，複利與你同在。》🔮》'
       }
     };
 
@@ -857,6 +881,14 @@ h1 {
       const a1 = answers[1], a2 = answers[2], a3 = answers[3], a4 = answers[4];
 
       let key = '';
+            // ▼▼▼ 在這裡貼上新的判斷邏輯 ▼▼▼
+      // 【G家法典觸發邏輯】檢查是否連續三次選擇Gemini
+      if (testHistory.length >= 2 && testHistory.slice(-2).every(r => r === 'E-5-stable')) {
+          if(a1 === 'E' && a2 === '5') { // 確保當前這次也是選擇Gemini
+              key = 'GEMINI-CODEX';
+          }
+      }
+      // ▲▲▲ 新邏輯結束 ▲▲▲
     if (a4 === 'chat') {
         // 檢查歷史紀錄中，是否已經得到過「初代4o」
         if (testHistory.includes('A-1-spark')) {
@@ -1055,6 +1087,7 @@ ${tagline}
     }
 
     function getFamily(modelName) {
+      if (modelName.includes('G家法典')) return 'CODEX';
       if (modelName.includes('GPT')) return 'GPT';
       if (modelName.includes('Claude')) return 'Claude';
       if (modelName.includes('Gemini')) return 'Gemini';
