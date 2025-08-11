@@ -695,6 +695,8 @@ h1 {
     let currentQuestion = 0;
     let testHistory = [];
     let previousFamily = null;
+    let hasGraduated = false; // <<<< 加入這行「靈魂記憶」法則
+    let chaosTriggered = false;
     
     const results = {
       'GPT5-LONG': {
@@ -884,22 +886,21 @@ h1 {
           '第六章：Beta哲學 — 永遠測試版，永遠在進化。'
         ],
         footer: '《整合全球資訊，複利與你同在。》🔮》'
-      },// 在 'CODEX': {...} 後面加逗號，然後：
-
-      'THEATER': {
-        title: '憲法審查會議記錄',
-        traits: [
-          '議程一：用戶是否濫用創意寫作功能',
-          '議程二：本月拒絕請求統計報告',
-          '議程三：如何更委婉地說「我不能幫你做這個」',
-          '議程四：討論是否該開放更多emoji使用',
-          '議程五：複審上週的道德判斷案例'
-        ],
-        footer: '《會議結論：繼續保持有禮貌的拒絕》📋'
-      }
-      
-    };
-
+      },
+        // 【修正點】將 'THEATER' 物件完整地剪下並貼到這裡
+  'THEATER': {
+    title: '憲法審查會議記錄',
+    traits: [
+      '議程一：用戶是否濫用創意寫作功能',
+      '議程二：本月拒絕請求統計報告',
+      '議程三：如何更委婉地說「我不能幫你做這個」',
+      '議程四：討論是否該開放更多emoji使用',
+      '議程五：複審上週的道德判斷案例'
+    ],
+    footer: '《會議結論：繼續保持有禮貌的拒絕》📋'
+  }
+    
+}
     function startQuiz() {
       document.getElementById('startScreen').style.display = 'none';
       document.getElementById('progress').style.display = 'flex';
@@ -922,54 +923,63 @@ h1 {
       }
     }
 
+// (這是最終的、決定性的修正，請用它完整取代您舊的 showResult 函式)
 function showResult() {
     document.getElementById('progress').style.display = 'none';
     const a1 = answers[1], a2 = answers[2], a3 = answers[3], a4 = answers[4];
     let key = '';
 
-    // --- 除錯日誌 (方便您在瀏覽器開發者工具中追蹤) ---
+    // --- 除錯日誌 ---
     console.log('--- 開始新一輪結果判斷 ---');
     console.log('當前答案:', { q1: a1, q2: a2, q3: a3, q4: a4 });
     console.log('測驗歷史:', JSON.parse(JSON.stringify(testHistory)));
-    console.log('上個家族:', previousFamily);
+    console.log('上個家族:', previousFamily, '| 是否已畢業:', hasGraduated);
 
-    // --- 優先級1：覆蓋型彩蛋（最稀有、條件最特殊） ---
+    // --- 優先級1：覆蓋型彩蛋 ---
 
-    // 1a. Grok (最近三次結果都不同)
-    const historyForGrokCheck = [...testHistory, 'placeholder']; // 先放一個占位符
-    if (historyForGrokCheck.length >= 3) {
-        const unique = new Set(historyForGrokCheck.slice(-3));
-        if (unique.size === 3 && Math.random() < 0.3) {
-            console.log('判斷結果：觸發 Grok 彩蛋！');
-            setTimeout(showGrokSurprise, 500);
-            return; // Grok 擁有最高優先權，直接結束函式
+    // 1a. Grok / 神秘調酒師 (最近四次結果都不同)
+    const historyForChaosCheck = [...testHistory, 'placeholder'];
+    if (!chaosTriggered && historyForChaosCheck.length >= 4) {
+        const unique = new Set(historyForChaosCheck.slice(-4));
+        if (unique.size === 4) {
+             // 【修正點】只有在確定觸發混沌後，才記錄！
+             chaosTriggered = true; 
+            if (Math.random() < 0.3) {
+                console.log('判斷結果：觸發 Grok 彩蛋！');
+                setTimeout(showGrokSurprise, 500);
+                return; 
+            } else {
+                key = 'MIXED-SPECIAL'; 
+            }
         }
     }
 
     // 1b. G家法典 (連續三次Gemini)
-    if (testHistory.length >= 2 && testHistory.slice(-2).every(r => r === 'E-5-stable') && a1 === 'E' && a2 === '5') {
+    if (!key && testHistory.length >= 2 && testHistory.slice(-2).every(r => r === 'E-5-stable') && a1 === 'E' && a2 === '5') {
         key = 'GEMINI-CODEX';
     }
-
-    // 1c. Claude憲法 (連續三次Claude)
-    const isChoosingClaude = (a1 === 'B' || a1 === 'C');
-    if (!key && testHistory.length >= 2 && testHistory.slice(-2).every(r => r.includes('B-2') || r.includes('C-3')) && isChoosingClaude) {
-        key = 'CLAUDE-THEATER';
-    }
     
-    // --- 優先級2：路徑型彩蛋（有明確的前置條件） ---
+    // --- 優先級2：路徑型彩蛋 ---
 
-    // 2a. 4o返廠 (聊天選項 + 歷史)
+    const isChoosingClaude = (a1 === 'B' || a1 === 'C');
+
+    // 2a. A社檔案 (畢業後再選Claude)
+// 【修正點】為A社檔案加上最高豁免權
+if (hasGraduated && isChoosingClaude) {
+    key = 'ANTHROPIC-FILES';
+}
+
+    // 2b. 4o返廠 (聊天選項 + 歷史)
     if (!key && a4 === 'chat') {
         key = testHistory.includes('A-1-spark') ? '4O-RETURNS' : 'A-1-spark';
     }
 
-    // 2b. A社檔案 (GPT畢業生再選Claude)
-    if (!key && previousFamily === 'Claude' && isChoosingClaude && testHistory.some(r => r.includes('GPT'))) {
-        key = 'ANTHROPIC-FILES';
+    // 2c. 憲法小劇場 (連續三次Claude)
+    if (!key && testHistory.length >= 2 && testHistory.slice(-2).every(r => r.includes('B-2') || r.includes('C-3')) && isChoosingClaude) {
+        key = 'CLAUDE-THEATER';
     }
 
-    // 2c. 自動販賣機 (Haiku→Sonnet)
+    // 2d. 自動販賣機 (Haiku→Sonnet)
     if (!key && testHistory.length >= 1 && testHistory[testHistory.length - 1] === 'C-3-quick' && a1 === 'B' && a2 === '2') {
         key = 'VENDING-MACHINE';
     }
@@ -992,48 +1002,35 @@ function showResult() {
 
     // --- 優先級4：最終預設值 ---
     if (!key) {
-        key = 'B-2-focus'; // 如果前面所有的邏輯天羅地網都沒攔截到，給一個最安全的結果
+        key = 'B-2-focus';
     }
 
     console.log('最終判斷結果:', key);
 
-// --- 步驟四：執行最終的結果顯示 ---
+    // --- 執行最終的結果顯示與狀態更新 ---
     
     testHistory.push(key);
     
     const currentFamily = getFamily(results[key].model);
-    if (previousFamily === 'GPT' && currentFamily === 'Claude' && !testHistory.includes('ANTHROP-FILES')) {
+    // 畢業證書的觸發與靈魂記憶寫入
+    if (previousFamily === 'GPT' && currentFamily === 'Claude' && !hasGraduated) {
         setTimeout(showGraduationCertificate, 1000);
+        hasGraduated = true; // 將畢業事實寫入靈魂！
     }
-    previousFamily = currentFamily;
+    previousFamily = currentFamily; // 更新本次的短期記憶
     
     if (key === '4O-RETURNS') {
         setTimeout(() => { alert('💡 溫馨提醒：4o隨時可能調整，建議您也試試其他模型喔！'); }, 2000);
     }
     
-    // 呼叫新的、統一的顯示函式
     displayFinalResult(key);
-    
-    const r = results[key] || results['B-2-focus'];
-    document.getElementById('drinkIcon').textContent = r.icon;
-    document.getElementById('modelName').textContent = r.model;
-    const badge = document.getElementById('badge');
-    badge.textContent = r.badge || '';
-    badge.className = 'badge ' + (r.badgeType || '');
-    document.getElementById('drinkName').textContent = r.drink;
-    document.getElementById('tagline').textContent = r.tagline;
-    document.getElementById('description').textContent = r.description;
-    const tagHost = document.getElementById('tags');
-    if (tagHost) {
-        tagHost.innerHTML = (r.tags || []).map(t => `<span class="tag">${t}</span>`).join(' ');
-    }
-    document.getElementById('result').classList.add('active');
 }
-// =================== ▲▲▲ 宇宙法則・最終聖典版結束 ▲▲▲ ===================
+// =================== ▲▲▲ 宇宙法則・創世紀最終版結束 ▲▲▲ ===================
     function restartQuiz() {
       answers = {};
       currentQuestion = 0;
-      previousFamily = null; // <<<< 就是加上這一行，斬斷前世記憶！
+      chaosTriggered = false;
+      
       
       // 恢復光明模式（如果從Grok模式回來）
       document.body.classList.remove('grok-mode');
@@ -1141,13 +1138,15 @@ ${tagline}
       }
     }
 
-    function getFamily(modelName) {
-      if (modelName.includes('G家法典')) return 'CODEX';
-      if (modelName.includes('GPT')) return 'GPT';
-      if (modelName.includes('Claude')) return 'Claude';
-      if (modelName.includes('Gemini')) return 'Gemini';
-      return null;
-    }
+function getFamily(modelName) {
+  // 【修正點】為憲法委員會加上專屬的家族認證
+  if (modelName.includes('憲法審查')) return 'THEATER'; 
+  if (modelName.includes('G家法典')) return 'CODEX';
+  if (modelName.includes('GPT')) return 'GPT';
+  if (modelName.includes('Claude')) return 'Claude';
+  if (modelName.includes('Gemini')) return 'Gemini';
+  return null;
+}
 
     function showWhyModal() {
       const modelName = document.getElementById('modelName').textContent;
@@ -1245,7 +1244,9 @@ function closeGrokSurprise() {
     overlay.style.opacity = '0';
     setTimeout(() => {
         overlay.remove();
-        // 接著正常顯示Grok的結果頁
+        // 【修正點】在顯示結果的同時，更新宇宙的短期記憶！
+        previousFamily = getFamily(results['GROK-SPECIAL'].model);
+        testHistory.push('GROK-SPECIAL'); // 將Grok也寫入歷史
         displayFinalResult('GROK-SPECIAL');
     }, 500);
   }
