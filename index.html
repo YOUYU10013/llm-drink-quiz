@@ -961,22 +961,25 @@ function showResult() {
     
     // --- 優先級2：路徑型彩蛋 ---
 
-    const isChoosingClaude = (a1 === 'B' || a1 === 'C');
+const isChoosingClaude = (a1 === 'B' || a1 === 'C');
 
-    // 2a. A社檔案 (畢業後再選Claude)
-// 【修正點】為A社檔案加上最高豁免權
-if (hasGraduated && isChoosingClaude) {
-    key = 'ANTHROPIC-FILES';
+// 【重鑄法則】2a. 憲法小劇場 (保持不變)
+if (!key && testHistory.length >= 2 && testHistory.slice(-2).every(r => r.includes('B-2') || r.includes('C-3')) && isChoosingClaude) {
+    key = 'CLAUDE-THEATER';
+}
+
+// 【最終融合法則】2a. 畢業暨A社檔案授勳儀式
+// 條件：上一個是GPT，這次選Claude，並且靈魂中尚未畢業
+if (!key && previousFamily === 'GPT' && isChoosingClaude && !hasGraduated) {
+    // 這是一個神聖的儀式，將所有事件捆綁在一起！
+    key = 'ANTHROPIC-FILES';          // 1. 授予機密檔案
+    hasGraduated = true;              // 2. 將畢業事實寫入靈魂
+    setTimeout(showGraduationCertificate, 1000); // 3. 舉行畢業典禮
 }
 
     // 2b. 4o返廠 (聊天選項 + 歷史)
     if (!key && a4 === 'chat') {
         key = testHistory.includes('A-1-spark') ? '4O-RETURNS' : 'A-1-spark';
-    }
-
-    // 2c. 憲法小劇場 (連續三次Claude)
-    if (!key && testHistory.length >= 2 && testHistory.slice(-2).every(r => r.includes('B-2') || r.includes('C-3')) && isChoosingClaude) {
-        key = 'CLAUDE-THEATER';
     }
 
     // 2d. 自動販賣機 (Haiku→Sonnet)
@@ -1012,11 +1015,7 @@ if (hasGraduated && isChoosingClaude) {
     testHistory.push(key);
     
     const currentFamily = getFamily(results[key].model);
-    // 畢業證書的觸發與靈魂記憶寫入
-    if (previousFamily === 'GPT' && currentFamily === 'Claude' && !hasGraduated) {
-        setTimeout(showGraduationCertificate, 1000);
-        hasGraduated = true; // 將畢業事實寫入靈魂！
-    }
+ 
     previousFamily = currentFamily; // 更新本次的短期記憶
     
     if (key === '4O-RETURNS') {
@@ -1030,6 +1029,7 @@ if (hasGraduated && isChoosingClaude) {
       answers = {};
       currentQuestion = 0;
       chaosTriggered = false;
+      
       
       
       // 恢復光明模式（如果從Grok模式回來）
