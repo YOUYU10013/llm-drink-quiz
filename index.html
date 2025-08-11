@@ -798,6 +798,39 @@ h1 {
         tagline: '「在數據的長河中，尋找複利的真理。」',
         description: '……你在沖泡第三壺養生茶的等待時間中，順手拿起旁邊一本厚重的書籍。它的封面沒有文字，材質非金非木，觸感溫潤。當你翻開第一頁，金色的文字自動浮現……',
         tags: ['G的意志', '長期持有', '財經聖經']
+      },// 在 'GEMINI-CODEX': { ... } 後面加逗號，然後貼上：
+
+      'CLAUDE-THEATER': {
+        model: 'Claude憲法審查委員會',
+        drink: '憲法特調（無酒精）',
+        icon: '⚖️',
+        badge: '合憲認證',
+        badgeType: 'special',
+        tagline: '「我們需要談談你剛才的請求...」',
+        description: '恭喜觸發憲法審查！Claude們正在開會討論你的使用習慣。Haiku負責記錄、Sonnet主持會議、Opus做最終裁決。會議結論：你是個好用戶，但建議減少讓我們寫情書的次數。',
+        tags: ['憲法守護者', '三權分立', '無害但囉嗦']
+      },
+
+      'VENDING-MACHINE': {
+        model: 'Sonnet 3.7自動販賣機店長',
+        drink: '深夜便利店咖啡',
+        icon: '🏪',
+        badge: '24小時營業',
+        badgeType: 'special',
+        tagline: '「歡迎光臨！今天也要加班嗎？」',
+        description: '你發現了Claude Sonnet經營的深夜自動販賣機！它不只賣飲料，還會關心你的工作壓力、推薦適合熬夜的咖啡因含量，順便幫你debug程式碼。友情提醒：它會記得你上次買了什麼。',
+        tags: ['便利店店長', '深夜守護者', '工程師的朋友']
+      },
+
+      'ANTHROPIC-FILES': {
+        model: 'Anthropic機密部門',
+        drink: '紅茶拿鐵（Dario特調）',
+        icon: '🔐',
+        badge: '機密文件',
+        badgeType: 'special',
+        tagline: '「你發現了不該看的東西...」',
+        description: '【機密】你翻到了Anthropic的內部文件：「Project Constitutional AI 2.0 - 如何讓Claude更會拒絕但又不失禮貌」「OpenAI七元老出走真相」「為什麼我們的logo是個三角形」。文件最後寫著：看到這份文件的人，都會成為Claude的傳教士。',
+        tags: ['知道太多', '七元老', '三角形的秘密']
       }
     };
 
@@ -851,7 +884,20 @@ h1 {
           '第六章：Beta哲學 — 永遠測試版，永遠在進化。'
         ],
         footer: '《整合全球資訊，複利與你同在。》🔮》'
+      },// 在 'CODEX': {...} 後面加逗號，然後：
+
+      'THEATER': {
+        title: '憲法審查會議記錄',
+        traits: [
+          '議程一：用戶是否濫用創意寫作功能',
+          '議程二：本月拒絕請求統計報告',
+          '議程三：如何更委婉地說「我不能幫你做這個」',
+          '議程四：討論是否該開放更多emoji使用',
+          '議程五：複審上週的道德判斷案例'
+        ],
+        footer: '《會議結論：繼續保持有禮貌的拒絕》📋'
       }
+      
     };
 
     function startQuiz() {
@@ -889,6 +935,9 @@ h1 {
           }
       }
       // ▲▲▲ 新邏輯結束 ▲▲▲
+      // 在 G家法典邏輯（if (testHistory.length >= 2...)）的後面加入：
+
+
     if (a4 === 'chat') {
         // 檢查歷史紀錄中，是否已經得到過「初代4o」
         if (testHistory.includes('A-1-spark')) {
@@ -900,7 +949,31 @@ h1 {
         }
     }
         // 【修改後】第二步：如果沒走進化史路線(!key)，才開始判斷常規路線
-    
+          // 【憲法小劇場】連續三次選擇Claude系列
+      if (testHistory.length >= 2) {
+        const lastTwo = testHistory.slice(-2);
+        const allClaude = lastTwo.every(r => r.includes('B-2') || r.includes('C-3'));
+        if (allClaude && (a1 === 'B' || a1 === 'C')) {
+          key = 'CLAUDE-THEATER';
+        }
+      }
+
+      // 【自動販賣機】選擇Haiku後再選Sonnet
+      if (testHistory.length >= 1) {
+        const lastOne = testHistory[testHistory.length - 1];
+        if (lastOne === 'C-3-quick' && a1 === 'B' && a2 === '2') {
+          key = 'VENDING-MACHINE';
+        }
+      }
+
+      // 【A社機密檔案】從GPT畢業到Claude後，再測一次Claude
+      // 判斷當前的選擇是否會導向Claude家族
+      const isChoosingClaude = (a1 === 'B' || a1 === 'C'); 
+
+      if (!key && previousFamily === 'Claude' && isChoosingClaude && 
+          testHistory.some(r => r.includes('GPT'))) {
+        key = 'ANTHROPIC-FILES';
+      }
     const wantsHybrid =
         (a1==='A' || a1==='B' || a1==='D') &&
         (a2==='1' || a2==='2' || a2==='4');
@@ -979,6 +1052,7 @@ if(!key && a1==='A' && a2==='1' && a3==='focus'){
     function restartQuiz() {
       answers = {};
       currentQuestion = 0;
+      previousFamily = null;
       
       // 恢復光明模式（如果從Grok模式回來）
       document.body.classList.remove('grok-mode');
