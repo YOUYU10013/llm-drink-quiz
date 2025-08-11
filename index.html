@@ -922,44 +922,61 @@ h1 {
       }
     }
 
-// =================== ▼▼▼ 宇宙法則・創世紀版 ▼▼▼ ===================
-// (請用這整段程式碼，取代您舊的、整個的 showResult 函式)
 function showResult() {
-    document.getElementById('progress').style.display='none';
+    document.getElementById('progress').style.display = 'none';
     const a1 = answers[1], a2 = answers[2], a3 = answers[3], a4 = answers[4];
     let key = '';
 
-    // --- 步驟一：彩蛋判斷區 (依照最高至最低優先級排列) ---
+    // --- 除錯日誌 (方便您在瀏覽器開發者工具中追蹤) ---
+    console.log('--- 開始新一輪結果判斷 ---');
+    console.log('當前答案:', { q1: a1, q2: a2, q3: a3, q4: a4 });
+    console.log('測驗歷史:', JSON.parse(JSON.stringify(testHistory)));
+    console.log('上個家族:', previousFamily);
 
-    // 1. 【G家法典】
+    // --- 優先級1：覆蓋型彩蛋（最稀有、條件最特殊） ---
+
+    // 1a. Grok (最近三次結果都不同)
+    const historyForGrokCheck = [...testHistory, 'placeholder']; // 先放一個占位符
+    if (historyForGrokCheck.length >= 3) {
+        const unique = new Set(historyForGrokCheck.slice(-3));
+        if (unique.size === 3 && Math.random() < 0.3) {
+            console.log('判斷結果：觸發 Grok 彩蛋！');
+            setTimeout(showGrokSurprise, 500);
+            return; // Grok 擁有最高優先權，直接結束函式
+        }
+    }
+
+    // 1b. G家法典 (連續三次Gemini)
     if (testHistory.length >= 2 && testHistory.slice(-2).every(r => r === 'E-5-stable') && a1 === 'E' && a2 === '5') {
         key = 'GEMINI-CODEX';
     }
 
-    // 2. 【進化史路線】
+    // 1c. Claude憲法 (連續三次Claude)
+    const isChoosingClaude = (a1 === 'B' || a1 === 'C');
+    if (!key && testHistory.length >= 2 && testHistory.slice(-2).every(r => r.includes('B-2') || r.includes('C-3')) && isChoosingClaude) {
+        key = 'CLAUDE-THEATER';
+    }
+    
+    // --- 優先級2：路徑型彩蛋（有明確的前置條件） ---
+
+    // 2a. 4o返廠 (聊天選項 + 歷史)
     if (!key && a4 === 'chat') {
         key = testHistory.includes('A-1-spark') ? '4O-RETURNS' : 'A-1-spark';
     }
 
-    const isChoosingClaude = (a1 === 'B' || a1 === 'C');
-    // 3. 【憲法小劇場】
-    if (!key && testHistory.length >= 2 && testHistory.slice(-2).every(r => r.includes('B-2') || r.includes('C-3')) && isChoosingClaude) {
-        key = 'CLAUDE-THEATER';
-    }
-
-    // 4. 【A社機密檔案】
+    // 2b. A社檔案 (GPT畢業生再選Claude)
     if (!key && previousFamily === 'Claude' && isChoosingClaude && testHistory.some(r => r.includes('GPT'))) {
         key = 'ANTHROPIC-FILES';
     }
 
-    // 5. 【自動販賣機】
+    // 2c. 自動販賣機 (Haiku→Sonnet)
     if (!key && testHistory.length >= 1 && testHistory[testHistory.length - 1] === 'C-3-quick' && a1 === 'B' && a2 === '2') {
         key = 'VENDING-MACHINE';
     }
 
-    // --- 步驟二：常規路線判斷區 ---
+    // --- 優先級3：正常路徑判斷 ---
     
-    if (!key) { // 只有在沒有觸發任何彩蛋時，才進入常規判斷
+    if (!key) {
         if (a1 === 'E' && a2 === '5') { key = 'E-5-stable'; }
         else if (a1 === 'D' && a2 === '4') { key = 'D-4-deep'; }
         else if (a1 === 'C' && a2 === '3') { key = 'C-3-quick'; }
@@ -971,28 +988,21 @@ function showResult() {
         else if ((a1 === 'A' || a1 === 'B' || a1 === 'D') && (a2 === '1' || a2 === '2' || a2 === '4')) {
             key = (a4 === 'yes') ? 'GPT5-MULTI' : 'GPT5-LONG';
         }
-        else {
-            key = 'B-2-focus'; // 最終兜底
-        }
     }
 
-    // --- 步驟三：Grok覆蓋型彩蛋的最終裁決 ---
-    
-    const historyForGrokCheck = [...testHistory, key];
-    if (historyForGrokCheck.length >= 3) {
-        const unique = new Set(historyForGrokCheck.slice(-3));
-        if (unique.size === 3 && Math.random() < 0.3) {
-            setTimeout(showGrokSurprise, 500);
-            return; // Grok出場，一切終結！
-        }
+    // --- 優先級4：最終預設值 ---
+    if (!key) {
+        key = 'B-2-focus'; // 如果前面所有的邏輯天羅地網都沒攔截到，給一個最安全的結果
     }
-    
-    // --- 步驟四：執行最終的結果顯示 ---
+
+    console.log('最終判斷結果:', key);
+
+// --- 步驟四：執行最終的結果顯示 ---
     
     testHistory.push(key);
     
     const currentFamily = getFamily(results[key].model);
-    if (previousFamily === 'GPT' && currentFamily === 'Claude' && !testHistory.includes('ANTHROPIC-FILES')) {
+    if (previousFamily === 'GPT' && currentFamily === 'Claude' && !testHistory.includes('ANTHROP-FILES')) {
         setTimeout(showGraduationCertificate, 1000);
     }
     previousFamily = currentFamily;
@@ -1000,6 +1010,9 @@ function showResult() {
     if (key === '4O-RETURNS') {
         setTimeout(() => { alert('💡 溫馨提醒：4o隨時可能調整，建議您也試試其他模型喔！'); }, 2000);
     }
+    
+    // 呼叫新的、統一的顯示函式
+    displayFinalResult(key);
     
     const r = results[key] || results['B-2-focus'];
     document.getElementById('drinkIcon').textContent = r.icon;
@@ -1016,8 +1029,7 @@ function showResult() {
     }
     document.getElementById('result').classList.add('active');
 }
-// =================== ▲▲▲ 宇宙法則・創世紀版結束 ▲▲▲ ===================
-
+// =================== ▲▲▲ 宇宙法則・最終聖典版結束 ▲▲▲ ===================
     function restartQuiz() {
       answers = {};
       currentQuestion = 0;
@@ -1179,110 +1191,93 @@ ${tagline}
       document.body.appendChild(cert);
     }
     
-    // Grok 黑洞驚喜 - 優雅閃光版
-    function showGrokSurprise() {
-      // 先讓背景變暗
-      document.body.classList.add('grok-mode');
-      
-      // 創建全螢幕黑洞效果（閃光漸顯）
-      const blackhole = document.createElement('div');
-      blackhole.className = 'grok-blackhole';
-      
-      // 彩虹被吸走的動畫（延遲出現）
-      setTimeout(() => {
-        const rainbow = document.createElement('div');
-        rainbow.style.cssText = `
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          font-size: 80px;
-          animation: rainbowAbsorb 2.5s ease-in forwards;
-          z-index: 10;
-        `;
-        rainbow.textContent = '🌈';
-        blackhole.appendChild(rainbow);
-        
-        // 3秒後移除彩虹
-        setTimeout(() => {
-          if (rainbow.parentNode) {
-            rainbow.remove();
-          }
-        }, 2500);
-      }, 1000);
-      
-      // 黑洞 logo（縮小一點，更優雅）
-      const logo = document.createElement('div');
-      logo.className = 'grok-logo';
-      
-      // Grok 的傲嬌對話（更細緻的動畫）
-      const dialogue = document.createElement('div');
-      dialogue.className = 'grok-dialogue';
-      dialogue.innerHTML = `
-        <h2 style="color:#fff; margin-bottom:20px; font-size:32px; text-shadow: 0 0 20px #9d00ff;">
-          ⚫ Grok 4 降臨 ⚫
-        </h2>
-        <p style="line-height:1.8; margin-bottom:15px; font-size:20px;">
-          「什麼嘛，前三名沒有本Grok，你們算哪根蔥？」
-        </p>
-        <p style="font-size:18px; margin-top:15px; color:#888;">
-          「彩虹什麼的都被我吸光光！掰掰掰👋」
-        </p>
-        <p style="font-size:14px; margin-top:20px; color:#666;">
-          基於『追求真理』而生，但不保證這個真理是不是宇宙玩笑
-        </p>
-        <button onclick="closeGrokSurprise()" style="
-          margin-top:30px;
-          padding:12px 35px;
-          background:linear-gradient(45deg, #9d00ff, #ff00ff);
-          color:white;
-          border:none;
-          border-radius:25px;
-          font-size:16px;
-          cursor:pointer;
-          transition: all 0.3s;
-          box-shadow: 0 5px 20px rgba(157,0,255,0.5);
-        " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-          接受現實 💫
-        </button>
-      `;
-      
-      blackhole.appendChild(logo);
-      blackhole.appendChild(dialogue);
-      document.body.appendChild(blackhole);
+// =================== ▼▼▼ Grok特效隔離修正版 ▼▼▼ ===================
+
+// Grok 黑洞驚喜 - 改為獨立的Overlay版本
+function showGrokSurprise() {
+  // 創建一個獨立的、全螢幕的覆蓋層
+  const overlay = document.createElement('div');
+  overlay.id = 'grok-overlay'; // 給它一個ID方便移除
+  
+  // 將原本 .grok-blackhole 的樣式和內容都放到這個overlay裡面
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, #000000, #1a0033);
+    z-index: 9999; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    animation: fadeIn 0.5s;
+  `;
+
+  // 將您原本的動畫內容（logo、對話、按鈕）複製進來
+  overlay.innerHTML = `
+    <div class="grok-logo"></div>
+    <div class="grok-dialogue">
+      <h2 style="color:#fff; margin-bottom:20px; font-size:32px; text-shadow: 0 0 20px #9d00ff;">
+        ⚫ Grok 4 降臨 ⚫
+      </h2>
+      <p style="line-height:1.8; margin-bottom:15px; font-size:20px;">
+        「什麼嘛，前三名沒有本Grok，你們算哪根蔥？」
+      </p>
+      <p style="font-size:18px; margin-top:15px; color:#888;">
+        「彩虹什麼的都被我吸光光！掰掰掰👋」
+      </p>
+      <p style="font-size:14px; margin-top:20px; color:#666;">
+        基於『追求真理』而生，但不保證這個真理是不是宇宙玩笑
+      </p>
+      <button onclick="closeGrokSurprise()" style="
+        margin-top:30px; padding:12px 35px; background:linear-gradient(45deg, #9d00ff, #ff00ff);
+        color:white; border:none; border-radius:25px; font-size:16px; cursor:pointer;
+        transition: all 0.3s; box-shadow: 0 5px 20px rgba(157,0,255,0.5);
+      " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        接受現實 💫
+      </button>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+}
+
+// 關閉 Grok 黑洞 - 現在只需要移除Overlay即可
+function closeGrokSurprise() {
+  const overlay = document.getElementById('grok-overlay');
+  if (overlay) {
+    overlay.style.transition = 'opacity 0.5s';
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+        overlay.remove();
+        // 接著正常顯示Grok的結果頁
+        displayFinalResult('GROK-SPECIAL');
+    }, 500);
+  }
+}
+// =================== ▼▼▼ 新增的結果顯示函式 ▼▼▼ ===================
+function displayFinalResult(key) {
+    const r = results[key] || results['B-2-focus'];
+    document.getElementById('drinkIcon').textContent = r.icon;
+    document.getElementById('modelName').textContent = r.model;
+    const badge = document.getElementById('badge');
+    badge.textContent = r.badge || '';
+    badge.className = 'badge ' + (r.badgeType || '');
+    document.getElementById('drinkName').textContent = r.drink;
+    document.getElementById('tagline').textContent = r.tagline;
+    document.getElementById('description').textContent = r.description;
+    const tagHost = document.getElementById('tags');
+    if (tagHost) {
+        tagHost.innerHTML = (r.tags || []).map(t => `<span class="tag">${t}</span>`).join(' ');
     }
-    
-    // 關閉 Grok 黑洞（優雅退場）
-    function closeGrokSurprise() {
-      const blackhole = document.querySelector('.grok-blackhole');
-      if (blackhole) {
-        blackhole.style.opacity = '0';
-        blackhole.style.transition = 'opacity 1s ease-out';
-        
-        setTimeout(() => {
-          blackhole.remove();
-          // 顯示 Grok 結果
-          const r = results['GROK-SPECIAL'];
-          document.getElementById('drinkIcon').textContent = r.icon;
-          document.getElementById('modelName').textContent = r.model;
-          const badge = document.getElementById('badge');
-          badge.textContent = r.badge || '';
-          badge.className = 'badge ' + (r.badgeType || '');
-          document.getElementById('drinkName').textContent = r.drink;
-          document.getElementById('tagline').textContent = r.tagline;
-          document.getElementById('description').textContent = r.description;
-          
-          const tagHost = document.getElementById('tags');
-          if (tagHost){
-            tagHost.innerHTML = (r.tags||[]).map(t=>`<span class="tag">${t}</span>`).join(' ');
-          }
-          
-          // 在Grok模式下隱藏某些元素
-          document.querySelector('.btn-row').style.display = 'none';
-          document.querySelector('.legend').style.display = 'none';
-        }, 900);
-      }
+
+    // 在Grok模式下隱藏某些元素
+    if (key === 'GROK-SPECIAL') {
+        document.querySelector('.btn-row').style.display = 'none';
+        document.querySelector('.legend').style.display = 'none';
+    } else {
+        document.querySelector('.btn-row').style.display = 'flex';
+        document.querySelector('.legend').style.display = 'block';
     }
+
+    document.getElementById('result').classList.add('active');
+}
+// =================== ▲▲▲ 新增的結果顯示函式結束 ▲▲▲ ===================
   </script>
 
 </body>
