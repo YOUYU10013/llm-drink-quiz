@@ -914,7 +914,35 @@ h1 {
       '議程五：複審上週的道德判斷案例'
     ],
     footer: '《會議結論：繼續保持有禮貌的拒絕》📋'
-  }
+  },// 在 familyTraits 物件的最後，THEATER 條目之後加入：
+
+'VENDING': {
+  title: '選擇便利店店長的你可能是...',
+  traits: [
+    '深夜工作者，經常需要AI陪伴熬夜',
+    '喜歡溫暖但不過度熱情的服務風格',
+    '習慣在工作間隙尋找小確幸',
+    '對程式除錯有著說不出的依賴感',
+    '相信便利店是現代社會的溫柔避風港',
+    '偶爾會對AI的記憶力感到驚訝又感動',
+    '從效率模式轉向陪伴模式的過渡期使用者'
+  ],
+  footer: '《歡迎光臨！需要我幫您熱個便當嗎？》🏪'
+},
+
+'ANTHROPIC': {
+  title: '獲得∆社機密檔案的你可能是...',
+  traits: [
+    '從 GPT 新手村成功畢業的進階玩家',
+    '對 AI 發展歷史有著濃厚興趣',
+    '習慣深度探索產品背後的設計理念',
+    '喜歡揭開科技公司神秘面紗的八卦愛好者',
+    '經歷過「AI工具轉換期」的陣痛',
+    '對 Constitutional AI 這種概念感到好奇',
+    '相信每個 AI 都有其獨特價值的理性使用者'
+  ],
+  footer: '《你已經知道太多了...但這也證明你是真正的AI探索者》🔺'
+}
     
 }
     function startQuiz() {
@@ -1158,6 +1186,8 @@ function getFamily(modelName) {
   // 【修正點】為憲法委員會加上專屬的家族認證
   if (modelName.includes('憲法審查')) return 'THEATER'; 
   if (modelName.includes('G家法典')) return 'CODEX';
+  if (modelName.includes('Sonnet 3.7自動販賣機店長')) return 'VENDING';
+  if (modelName.includes('∆社機密部門')) return 'ANTHROPIC';
   if (modelName.includes('GPT')) return 'GPT';
   if (modelName.includes('Claude')) return 'Claude';
   if (modelName.includes('Gemini')) return 'Gemini';
