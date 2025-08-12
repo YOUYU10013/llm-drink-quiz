@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LLM飲品的速通菜單!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* 設計風格: 大地黏土風 (Earthen Claymorphism)
+      核心原則:
+      1.  統一背景色: 所有元素的背景色與頁面背景色(#F0E5D8)完全相同。
+      2.  光影雕刻: 元素的立體感完全由左上角光源產生的內外陰影構成。
+      3.  圓潤可愛: 採用 Nunito 圓體字，所有邊角都使用大圓角。
+      4.  大地色系: 點綴色與文字顏色均來自溫暖的大地色系。
+    */
+
+    :root {
+      --bg-color: #F0E5D8;
+      --text-color: #5D4037;
+      --accent-color-1: #C39B7B;
+      --accent-color-2: #B07D62;
+      --shadow-light: rgba(255, 255, 255, 0.6);
+      --shadow-dark: rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      font-family: 'Nunito', 'YuanTi', sans-serif;
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start; /* 改為flex-start以適應長內容 */
+      padding: 24px;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      background-color: var(--bg-color);
+      border-radius: 30px;
+      padding: 32px;
+      box-shadow: -12px -12px 24px var(--shadow-light), 12px 12px 24px var(--shadow-dark);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent-color-2);
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-color);
+    }
+
+    .chapter {
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-color-1);
+      padding: 12px 20px;
+      margin-bottom: 24px;
+      border-radius: 20px;
+      display: inline-block;
+      background-color: var(--bg-color);
+      /* 凹陷效果 (Concave) */
+      box-shadow: inset -5px -5px 10px var(--shadow-light), inset 5px 5px 10px var(--shadow-dark);
+    }
+
+    /* 手機端優化：表格滾動容器 */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 15px; /* 讓滾動容器也有圓角 */
+      padding: 4px; /* 增加一點內邊距避免陰影被裁切 */
+    }
+
+    table {
+      width: 100%;
+      min-width: 800px; /* 設定一個最小寬度，確保在手機上觸發滾動 */
+      border-collapse: separate;
+      border-spacing: 12px;
+    }
+
+    th, td {
+      padding: 16px;
+      background-color: var(--bg-color);
+      border-radius: 15px;
+      text-align: left;
+      vertical-align: top;
+      transition: all 0.3s ease;
+    }
+
+    th {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--accent-color-2);
+      /* 浮起效果 (Convex) */
+      box-shadow: -6px -6px 12px var(--shadow-light), 6px 6px 12px var(--shadow-dark);
+    }
+
+    td {
+      /* 輕微凹陷效果 */
+      box-shadow: inset -3px -3px 6px var(--shadow-light), inset 3px 3px 6px var(--shadow-dark);
+    }
+    
+    tr:hover td {
+      transform: translateY(-3px);
+      box-shadow: -6px -6px 12px var(--shadow-light), 6px 6px 12px var(--shadow-dark);
+    }
+
+    td b {
+      color: var(--accent-color-1);
+      font-weight: 700;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 32px;
+    }
+    
+    .back-link {
+      display: inline-block;
+      padding: 16px 32px;
+      border-radius: 999px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: -8px -8px 16px var(--shadow-light), 8px 8px 16px var(--shadow-dark);
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      transform: scale(1.05);
+      box-shadow: -6px -6px 12px var(--shadow-light), 6px 6px 12px var(--shadow-dark);
+    }
+    
+    .back-link:active {
+      box-shadow: inset -5px -5px 10px var(--shadow-light), inset 5px 5px 10px var(--shadow-dark);
+      transform: scale(0.98);
+    }
+
+    /* 響應式設計：手機端專屬優化 */
+    @media (max-width: 768px) {
+      body {
+        padding: 16px;
+        align-items: flex-start; /* 手機上從頂部開始 */
+      }
+      .container {
+        padding: 24px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      h2 {
+        font-size: 1.5rem;
+      }
+      th, td {
+        padding: 12px;
+        font-size: 0.9rem; /* 稍微縮小字體以容納更多內容 */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>『LLM飲品的速通菜單!』</h1>
+      <p class="subtitle">資深冒險者專屬，解鎖所有隱藏结局的終極密典</p>
+    </header>
+
+    <main>
+      <section class="chapter">
+        <h2>🧭 第一章：常規路線 (Standard Path)</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>目標飲品</th>
+                <th>Q1 (想要)</th>
+                <th>Q2 (任務)</th>
+                <th>Q3 (心情)</th>
+                <th>Q4 (多媒體)</th>
+                <th>嚮導筆記</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>GPT-4.5 (雞尾酒)</b></td>
+                <td>📐(B)</td>
+                <td>💻(4)</td>
+                <td>(任意)</td>
+                <td>(非chat)</td>
+                <td>技術型任務的最穩定選擇，充滿優雅的語感。</td>
+              </tr>
+              <tr>
+                <td><b>GPT-4.1 (水果沙瓦)</b></td>
+                <td>🎨(A)</td>
+                <td>💡(1)</td>
+                <td>🔹(focus)</td>
+                <td>(非chat)</td>
+                <td>需要快速、清爽的創意時，選它準沒錯。</td>
+              </tr>
+              <tr>
+                <td><b>GPT-o3 (能量飲料)</b></td>
+                <td>🧠(D)</td>
+                <td>💻(4)</td>
+                <td>(任意)</td>
+                <td>(非chat)</td>
+                <td>追求嚴謹推理時的選擇，雖然慢但很紮實。</td>
+              </tr>
+              <tr>
+                <td><b>Gemini (養生茶)</b></td>
+                <td>📚(E)</td>
+                <td>📊(5)</td>
+                <td>(任意)</td>
+                <td>(任意)</td>
+                <td>解鎖「G家法典」的前置路線，專精資料整合。</td>
+              </tr>
+              <tr>
+                <td><b>Claude Opus (濃縮)</b></td>
+                <td>📐(B)</td>
+                <td>📝(2)</td>
+                <td>🔻(deep)</td>
+                <td>(非chat)</td>
+                <td>進行大型專案或多層次深度推理時的專家級飲品。</td>
+              </tr>
+              <tr>
+                <td><b>Claude Sonnet (拿鐵)</b></td>
+                <td>📐(B)</td>
+                <td>📝(2)</td>
+                <td>(非deep)</td>
+                <td>(非chat)</td>
+                <td>結構穩健，最適合陪伴式的規劃型任務。</td>
+              </tr>
+              <tr>
+                <td><b>Claude Haiku (濾泡)</b></td>
+                <td>⚡(C)</td>
+                <td>🔄(3)</td>
+                <td>(任意)</td>
+                <td>(非chat)</td>
+                <td>Haiku的專屬快速通道，追求極致效率。</td>
+              </tr>
+              <tr>
+                <td><b>GPT-5 (多模態)</b></td>
+                <td>🎨(A)/📐(B)/🧠(D)</td>
+                <td>📝(2)/💻(4)</td>
+                <td>(任意)</td>
+                <td>✅(yes)</td>
+                <td>當代旗艦，處理圖文混合任務的首選。</td>
+              </tr>
+              <tr>
+                <td><b>GPT-5 (長文)</b></td>
+                <td>🎨(A)/📐(B)/🧠(D)</td>
+                <td>📝(2)/💻(4)</td>
+                <td>(任意)</td>
+                <td>❌(no)</td>
+                <td>旗艦級的純文字版，專攻長文推理。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="chapter">
+        <h2>🥚 第二章：彩蛋路徑 (Easter Egg Path)</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>彩蛋名稱</th>
+                <th>觸發條件</th>
+                <th>嚮導筆記</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>G家法典 📖</b><br/>(神聖財經指南)</td>
+                <td>連續三次測驗都選擇通往 <b>Gemini (養生茶)</b> 的路線 (Q1:E, Q2:5)。</td>
+                <td>這是對Gemini最忠實信徒的獎勵。當您過去兩次的結果都是「養生茶」，並且第三次依然選擇它時，這本神秘的法典便會為您開啟。</td>
+              </tr>
+              <tr>
+                <td><b>GPT-4o 進化史 🍹➡️🔄</b><br/>(冰火特調)</td>
+                <td>1. <b>初代版</b>：在Q4選擇<b>「💬 只是想聊聊...」</b>即可獲得。<br/>2. <b>返廠版</b>：在獲得過「初代版」後，<b>再次</b>於Q4選擇<b>「💬 只是想聊聊...」</b>。</td>
+                <td>這是一條有記憶的路線。系統會記得您是否來過，並在您再次光臨時，為您端上那杯傳說中的「回鍋版」特調。</td>
+              </tr>
+              <tr>
+                <td><b>Claude 憲法小劇場 ⚖️</b><br/>(憲法特調)</td>
+                <td>連續三次測驗都選擇 <b>Claude 家族</b>的任一成員 (通往Sonnet, Opus, Haiku的路徑)。</td>
+                <td>當系統發現您是Claude的忠實用戶，便會邀請您旁聽他們的內部會議，見證AI們如何為了「合憲性」而煩惱。</td>
+              </tr>
+              <tr>
+                <td><b>Anthropic 機密檔案 🔐</b><br/>(紅茶拿鐵)</td>
+                <td>1. 先獲得任一 <b>GPT家族</b> 的結果。<br/>2. 再獲得任一 <b>Claude家族</b> 的結果（觸發畢業證書）。<br/>3. <b>再次</b>選擇任一 <b>Claude家族</b> 的路線。</td>
+                <td>這是為「從GPT畢業」的進階用戶準備的深度劇情。當您徹底投入Claude的懷抱後，將有機會一窺Anthropic內部的最高機密。</td>
+              </tr>
+              <tr>
+                <td><b>Sonnet 自動販賣機 🏪</b><br/>(深夜便利店咖啡)</td>
+                <td>1. 先獲得 <b>Claude Haiku (濾泡咖啡)</b> 的結果。<br/>2. <b>緊接著下一次</b>測驗選擇通往 <b>Claude Sonnet (香醇拿鐵)</b> 的路線。</td>
+                <td>當您從輕快的Haiku轉向穩健的Sonnet時，會意外發現Sonnet店長經營的深夜販賣機，這是專為從高效率轉為穩健工作模式的用戶準備的溫馨彩蛋。</td>
+              </tr>
+              <tr>
+                <td><b>Grok 霸道總裁 ⚫</b><br/>(虛無黑洞特調)</td>
+                <td>在最近三次的測驗中，獲得<b>三種完全不同</b>的結果。</td>
+                <td>純粹的混沌理論！當您的選擇路徑飄忽不定，展現出極高的不確定性時，就有<b>30%</b>的機率撕裂時空，召喚出Grok來接管一切。</td>
+              </tr>
+              <tr>
+                <td><b>神秘調酒師 🌈</b><br/>(量子疊加特調)</td>
+                <td>在最近三次的測驗中，獲得<b>三種完全不同</b>的結果。</td>
+                <td>如果混沌沒有召喚出Grok（70%機率），神秘的調酒師就會現身，為您這位難以捉摸的靈魂，調製一杯什麼都有的特調。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    
+    <footer class="footer">
+      <!-- 這裡的連結請務必換成您主測驗的最終網址！ -->
+      <a href="#" class="back-link">返回 LLM 飲品測驗 🧪</a>
+    </footer>
+
+  </div>
+
+</body>
+</html>
