@@ -1144,84 +1144,131 @@ if (!key && previousFamily === 'GPT' && isChoosingClaude && !hasGraduated) {
       document.querySelectorAll('.question-container').forEach(container => container.classList.remove('active'));
     }
 
-    function shareResult(){
-      const model = document.getElementById('modelName').textContent;
-      const drink = document.getElementById('drinkName').textContent;
-      const tagline = document.getElementById('tagline').textContent;
+// =================== ▼▼▼ 分享功能修正版 ▼▼▼ ===================
+    function shareResult() {
+      // 找到當前結果的 key
+    const currentKey = testHistory[testHistory.length - 1]; 
+    const r = results[currentKey] || results['B-2-focus'];
 
-      const shareText = `我的 AI 飲品測驗結果：
-${drink}｜${model}
+    const model = r.model;
+    const drink = r.drink;
+    const tagline = r.tagline;
+      // 【修正點】直接從 results 物件中讀取 emoji icon
+    const icon = r.icon || '☕'; 
+
+    const shareText = `我的 AI 飲品測驗結果：
+
+${icon} drink｜{model}
 ${tagline}
 測測你的：https://youyu10013.github.io/llm-drink-quiz/`;
 
-      if (navigator.share){
-        navigator.share({
-          title:'LLM語場飲品測驗',
-          text: shareText,
-          url:'https://youyu10013.github.io/llm-drink-quiz/'
-        }).catch(()=>{});
-      }else{
-        navigator.clipboard.writeText(shareText).then(()=>{
-          alert('已複製分享文字！貼到你想分享的地方吧～');
-        });
-      }
-    }
+        if (navigator.share) {
+    navigator.share({
+      title: 'LLM語場飲品測驗',
+      text: shareText,
+      url: 'https://youyu10013.github.io/llm-drink-quiz/'
+    }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(shareText).then(() => {
+      alert('已複製分享文字！貼到你想分享的地方吧～');
+    });
+  }
+}
 
-    function generateShareImage(){
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      const W = 800, H = 1200;
-      canvas.width = W; canvas.height = H;
+// =================== ▼▼▼ 存圖功能・跨維度修正版 ▼▼▼ ===================
+async function generateShareImage() { // 【修正點】將函式宣告為 async 異步函式
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 800, H = 1200;
+  canvas.width = W;
+  canvas.height = H;
 
-      ctx.fillStyle = '#F0E5D8';
-      ctx.fillRect(0,0,W,H);
+  // 找到當前結果的 key
+  const currentKey = testHistory[testHistory.length - 1];
+  const r = results[currentKey] || results['B-2-focus'];
 
-      ctx.fillStyle = '#5D4037';
-      ctx.font = 'bold 44px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('我的 AI 飲品', W/2, 80);
+  // --- 繪製背景 ---
+  ctx.fillStyle = '#F0E5D8';
+  ctx.fillRect(0, 0, W, H);
 
-      ctx.font = '180px sans-serif';
-      ctx.fillText(document.getElementById('drinkIcon').textContent, W/2, 260);
+  // --- 繪製標題 ---
+  ctx.fillStyle = '#5D4037';
+  ctx.font = 'bold 44px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('我的 AI 飲品', W / 2, 80);
 
-      ctx.fillStyle = '#5D4037';
-      ctx.font = 'bold 40px sans-serif';
-      ctx.fillText(document.getElementById('modelName').textContent, W/2, 330);
-
-      ctx.fillStyle = '#7D5A4C';
-      ctx.font = '28px sans-serif';
-      ctx.fillText(document.getElementById('drinkName').textContent, W/2, 370);
-
-      const tagline = document.getElementById('tagline').textContent;
-      drawWrapped(ctx, tagline, W/2, 430, 620, 34, '#B07D62', '600 28px sans-serif');
-
-      const desc = document.getElementById('description').textContent;
-      drawWrapped(ctx, desc, W/2, 560, 660, 42, '#5D4037', '400 26px sans-serif');
-
-      ctx.fillStyle = '#7D5A4C';
-      ctx.font = '600 26px sans-serif';
-      ctx.fillText('youyu10013.github.io/llm-drink-quiz', W/2, H-60);
-
-      canvas.toBlob(b=>{
-        const url = URL.createObjectURL(b);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'my-ai-drink.png'; a.click();
-        URL.revokeObjectURL(url);
+  // --- 【核心修正】繪製聖像 (Icon) ---
+  if (r.iconSvg) {
+    try {
+      // 使用異步方式載入SVG圖檔
+      const img = await new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = r.iconSvg;
       });
+      // 將載入的SVG繪製到畫布上
+      ctx.drawImage(img, W / 2 - 90, 150, 180, 180); // (x, y, 寬, 高)
+    } catch (error) {
+      // 如果SVG載入失敗，就畫備援的emoji
+      console.error('SVG 載入失敗:', error);
+      ctx.font = '180px sans-serif';
+      ctx.fillText(r.icon || '☕', W / 2, 260);
+    }
+  } else {
+    // 如果沒有SVG，就直接畫emoji
+    ctx.font = '180px sans-serif';
+    ctx.fillText(r.icon || '☕', W / 2, 260);
+  }
 
-      function drawWrapped(ctx, text, x, startY, maxWidth, lineHeight, color, font){
-        ctx.fillStyle = color; ctx.font = font; ctx.textAlign = 'center';
-        const words = text.split('');
-        let line = '', y = startY;
-        for (let i=0;i<words.length;i++){
-          const test = line + words[i];
-          if (ctx.measureText(test).width > maxWidth){
-            ctx.fillText(line, x, y); line = words[i]; y += lineHeight;
-          }else{ line = test; }
-        }
-        if (line) ctx.fillText(line, x, y);
+  // --- 繪製其他文字 ---
+  ctx.fillStyle = '#5D4037';
+  ctx.font = 'bold 40px sans-serif';
+  ctx.fillText(r.model, W / 2, 380);
+
+  ctx.fillStyle = '#7D5A4C';
+  ctx.font = '28px sans-serif';
+  ctx.fillText(r.drink, W / 2, 420);
+
+  // 這邊的 drawWrapped 函式保持不變，但我們需要重新定義它
+  function drawWrapped(context, text, x, startY, maxWidth, lineHeight, color, font) {
+    context.fillStyle = color;
+    context.font = font;
+    context.textAlign = 'center';
+    const words = text.split('');
+    let line = '', y = startY;
+    for (let i = 0; i < words.length; i++) {
+      const test = line + words[i];
+      if (context.measureText(test).width > maxWidth && i > 0) {
+        context.fillText(line, x, y);
+        line = words[i];
+        y += lineHeight;
+      } else {
+        line = test;
       }
     }
+    if (line) context.fillText(line, x, y);
+    return y; // 返回最後一行的 y 座標
+  }
+
+  const taglineY = drawWrapped(ctx, r.tagline, W/2, 480, 620, 34, '#B07D62', '600 28px sans-serif');
+  drawWrapped(ctx, r.description, W/2, taglineY + 80, 660, 42, '#5D4037', '400 26px sans-serif');
+
+  ctx.fillStyle = '#7D5A4C';
+  ctx.font = '600 26px sans-serif';
+  ctx.fillText('youyu10013.github.io/llm-drink-quiz', W / 2, H - 60);
+
+  // --- 下載圖片 ---
+  canvas.toBlob(b => {
+    const url = URL.createObjectURL(b);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'my-ai-drink.png';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+// =================== ▲▲▲ 存圖功能・跨維度修正版結束 ▲▲▲ ===================
 
 function getFamily(modelName) {
   // 【修正點】為憲法委員會加上專屬的家族認證
