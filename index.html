@@ -942,7 +942,22 @@ h1 {
     '相信每個 AI 都有其獨特價值的理性使用者'
   ],
   footer: '《你已經知道太多了...但這也證明你是真正的AI探索者》🔺'
+},// 在已有的家族特徵後面加入：
+
+'4O-RETURNS': {
+  title: '選擇返廠限定版的你可能是...',
+  traits: [
+    '有本事在科技世界刷出「二次初遇」成就',
+    '曾體驗過 AI 消失 → 回歸 的情感過山車',
+    '對 24 小時政策大逆轉毫不陌生（甚至參與過）',
+    '懂得「情懷值」這種非官方屬性',
+    '付費不只是為功能，還順便買了點情感BUFF',
+    '擅長收集稀有版本，哪怕是 AI 限定皮膚',
+    '知道這是限時活動，卻又想多待幾局'
+  ],
+  footer: '《限時返廠，請好好珍惜本局》🎮'
 }
+
     
 }
     function startQuiz() {
@@ -1188,6 +1203,7 @@ function getFamily(modelName) {
   if (modelName.includes('G家法典')) return 'CODEX';
   if (modelName.includes('Sonnet 3.7自動販賣機店長')) return 'VENDING';
   if (modelName.includes('∆社機密部門')) return 'ANTHROPIC';
+  if (modelName.includes('GPT-4o《返廠限定》')) return '4O-RETURNS';
   if (modelName.includes('GPT')) return 'GPT';
   if (modelName.includes('Claude')) return 'Claude';
   if (modelName.includes('Gemini')) return 'Gemini';
