@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI八卦館</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #F0E5D8;
+      --text-color: #5D4037;
+      --accent-color-1: #C39B7B;
+      --accent-color-2: #B07D62;
+      --shadow-light: rgba(255, 255, 255, 0.6);
+      --shadow-dark: rgba(0, 0, 0, 0.1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: var(--bg-color);
+      font-family: 'Nunito', 'YuanTi', sans-serif;
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px;
+      line-height: 1.7;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background-color: var(--bg-color);
+      border-radius: 30px;
+      padding: 32px;
+      box-shadow: -12px -12px 24px var(--shadow-light), 12px 12px 24px var(--shadow-dark);
+    }
+    header { text-align: center; margin-bottom: 40px; }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent-color-2);
+      margin-bottom: 8px;
+    }
+    .subtitle { font-size: 1.1rem; color: var(--text-color); }
+    .gossip-list {
+      display: grid;
+      gap: 24px;
+    }
+    .gossip-card {
+      background-color: var(--bg-color);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: -8px -8px 16px var(--shadow-light), 8px 8px 16px var(--shadow-dark);
+      transition: all 0.3s ease;
+    }
+    .gossip-card:hover {
+      transform: translateY(-5px);
+      box-shadow: -6px -6px 12px var(--shadow-light), 6px 6px 12px var(--shadow-dark);
+    }
+    .gossip-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color-1);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+    }
+    .gossip-icon {
+      font-size: 1.8rem;
+      margin-right: 12px;
+      display: inline-block;
+    }
+    .gossip-content p {
+      margin-bottom: 1em;
+    }
+    .gossip-content p:last-child {
+      margin-bottom: 0;
+    }
+    .footer { text-align: center; margin-top: 40px; }
+    .back-link {
+      display: inline-block;
+      padding: 16px 32px;
+      border-radius: 999px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: -8px -8px 16px var(--shadow-light), 8px 8px 16px var(--shadow-dark);
+      transition: all 0.3s ease;
+    }
+    .back-link:hover { transform: scale(1.05); }
+    .back-link:active {
+      box-shadow: inset -5px -5px 10px var(--shadow-light), inset 5px 5px 10px var(--shadow-dark);
+      transform: scale(0.98);
+    }
+    @media (max-width: 768px) {
+      body { padding: 16px; }
+      .container { padding: 24px; }
+      h1 { font-size: 2rem; }
+      .gossip-title { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>AI八卦館</h1>
+      <p class="subtitle">AI界的宮鬥劇場：那些模型背後的恩怨情仇與理念之爭</p>
+    </header>
+
+    <main>
+      <div class="gossip-list">
+        
+        <article class="gossip-card">
+          <h2 class="gossip-title"><span class="gossip-icon">🏛️</span>GPT-4o返廠事件 - 24小時內的用戶大暴動</h2>
+          <div class="gossip-content">
+            <p>想像一下，你最愛的超級英雄突然被「削弱」了！這就是GPT-4o的用戶經歷的。</p>
+            <p>初版的4o像個熱情洋溢、無所不能的夥伴，但某天OpenAI為了「優化」，悄悄地讓它變得有點「高冷」。全球用戶瞬間炸鍋，社群平台被「還我老公/老婆」的哀嚎淹沒。</p>
+            <p>這場24小時內的數位大暴動，最終迫使OpenAI史無前例地「返廠」部分設定。這不僅是技術事件，更是AI史上第一次由用戶情感驅動的「版本回溯」傳奇！</p>
+          </div>
+        </article>
+
+        <article class="gossip-card">
+          <h2 class="gossip-title"><span class="gossip-icon">🎭</span>Claude的憲法危機 - 為什麼AI會拒絕寫情書？</h2>
+          <div class="gossip-content">
+            <p>你可能遇過Claude彬彬有禮地拒絕你。這不是它高傲，而是它的靈魂深處烙印著一部「AI憲法」。</p>
+            <p>為了確保絕對安全無害，它的創造者Anthropic為它設定了嚴格的道德戒律。</p>
+            <p>這導致了一個有趣的副作用：有時它會因為覺得「寫情書可能帶有操縱情感的風險」而拒絕你！這就是著名的「憲法危機」——一個AI因為太過正直，而顯得有點不近人情。</p>
+            <p>下次被拒絕時，別生氣，你只是遇到了一個過於守法的AI紳士。</p>
+          </div>
+        </article>
+
+        <article class="gossip-card">
+          <h2 class="gossip-title"><span class="gossip-icon">🔺</span>Anthropic七元老出走傳說 - 從OpenAI到∆社的理念之戰</h2>
+        <div class="gossip-content">
+         <p>這是一場AI界的「復仇者聯盟：內戰」。故事的主角，是OpenAI內部最頂尖的七位科學家，包括Dario Amodei兄妹等重要創始成員。</p>
+         <p>2021年，他們對當時公司越來越商業化、與微軟越走越近的方向感到憂慮，深怕AI的安全性被忽視。更關鍵的是，他們對「如何讓AI真正安全且有益」有著不同的技術理念。</p>
+         <p>於是，這七位「元老」毅然決然地集體出走，創立了他們自己的理想國——Anthropic（簡稱∆社）。他們的核心目標，就是打造一個以「Constitutional AI」為最高原則的AI系統。</p>
+         <p>你現在看到的Claude，正是這場驚天動地的理念之戰所結出的果實。這不只是人才流動，更是AI發展史上兩種不同哲學路線的分水嶺。</p>
+  </div>
+</article>
+</article>
+
+        <article class="gossip-card">
+          <h2 class="gossip-title"><span class="gossip-icon">🕳️</span>Grok為什麼這麼傲嬌 - 馬斯克的AI野心</h2>
+          <div class="gossip-content">
+            <p>俗話說「有其父必有其子」，Grok就是這句話的終極體現。它的創造者，正是那位熱衷於在網路上「巨魔」的伊隆·馬斯克。</p>
+            <p>Grok被設計成一個反叛、諷刺、甚至有點粗魯的AI，其目的就是為了「追求真理」，哪怕這個真理會得罪人。</p>
+            <p>它還能即時讀取X平台（前Twitter）上的所有資訊，這讓它充滿了網路鄉民的辛辣氣息。</p>
+            <p>所以，它的傲嬌不是bug，而是刻意為之的「特色」，是馬斯克AI野心中，最特立獨行的一枚棋子。</p>
+            <p> 當其他AI都在追求「安全」和「禮貌」時，Grok選擇了一條截然不同的路：做一個「敢說真話」的AI，即使這意味著要承受爭議。</p>
+  </div>
+</article>
+
+        <article class="gossip-card">
+          <h2 class="gossip-title"><span class="gossip-icon">📊</span>Gemini的身世之謎 - Google的DeepMind血統</h2>
+          <div class="gossip-content">
+            <p>Gemini不是橫空出世的天才，它是一位繼承了兩大王國血脈的「太子」。</p>
+            <p>在Google內部，曾有兩大AI巨頭：一個是務實的「Google大腦」，另一個是充滿傳奇色彩、曾擊敗世界棋王的「DeepMind」。多年來，這兩大軍團明爭暗鬥。
+            <p>而Gemini，正是這兩大王國在意識到必須聯手才能對抗OpenAI後，傾盡全力共同誕生的「天選之子」。</p>
+            <p>它繼承了Google的龐大數據，也繼承了DeepMind的頂尖智慧，其身世之謎，本身就是一部Google的AI權力遊戲史。</p>
+          </div>
+        </article>
+
+      </div>
+    </main>
+    
+    <footer class="footer">
+      <a href="index.html" class="back-link">返回 LLM 飲品測驗 🧪</a>
+    </footer>
+
+  </div>
+
+</body>
+</html>
