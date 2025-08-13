@@ -98,6 +98,15 @@ h1 {
   background: #C39B7B;
   transform: scale(1.4);
 }
+.drink-icon { line-height: 1; }       /* 與 emoji 保持對齊 */
+.icon-svg {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  image-rendering: auto;
+}
 
 .question-container {
   display: none;
@@ -758,6 +767,7 @@ h1 {
         model: '神秘調酒師特調',
         drink: '量子疊加特調',
         icon: '🌈',
+        iconSvg: 'images/mixed-special.svg',   // ← 新增：你的 SVG 路徑
         badge: '隱藏限定', 
         badgeType: 'special',
         tagline: '「你是個多變的靈魂，來杯什麼都有的特調吧！」',
@@ -811,7 +821,8 @@ h1 {
       'GROK-SPECIAL': {
         model: 'Grok 4《霸道總裁》',
         drink: '虛無黑洞特調',
-        icon: '🕳️',
+        icon: '🕳️',                          // ← 備援用 emoji（載入失敗時會用到）
+        iconSvg: 'images/grok-special_1.svg',   // ← 新增：你的 SVG 路徑
         badge: '隱藏BOSS',
         badgeType: 'special',
         tagline: '「什麼嘛，前三名沒有本Ꮆrok，你們算哪根蔥」',
@@ -822,6 +833,7 @@ h1 {
         model: 'G家法典',
         drink: '神聖財經指南',
         icon: '📖',
+        iconSvg: 'images/gemini-codex.svg',   // ← 新增：你的 SVG 路徑
         badge: '材質未知',
         badgeType: 'special',
         tagline: '「在數據的長河中，尋找複利的真理。」',
@@ -833,6 +845,7 @@ h1 {
         model: 'Claude憲法審查委員會',
         drink: '憲法特調（無酒精）',
         icon: '⚖️',
+        iconSvg: 'images/claude-theater.svg',   // ← 新增：你的 SVG 路徑
         badge: '合憲認證',
         badgeType: 'special',
         tagline: '「我們需要談談你剛才的請求...」',
@@ -844,6 +857,7 @@ h1 {
         model: 'Sonnet 3.7自動販賣機店長',
         drink: '深夜便利店咖啡',
         icon: '🏪',
+        iconSvg: 'images/vending-machine.svg',   // ← 新增：你的 SVG 路徑
         badge: '24小時營業',
         badgeType: 'special',
         tagline: '「歡迎光臨！今天也要加班嗎？」',
@@ -853,8 +867,9 @@ h1 {
 
       'ANTHROPIC-FILES': {
         model: '∆社機密部門',
-        drink: '紅茶拿鐵（Dario特調）',
+        drink: '（畢業贈禮）',
         icon: '🔐',
+        iconSvg: 'images/anthropic-files.svg',   // ← 新增：你的 SVG 路徑
         badge: '機密文件',
         badgeType: 'special',
         tagline: '「你發現了不該看的東西...」',
@@ -1327,7 +1342,16 @@ function closeGrokSurprise() {
 // =================== ▼▼▼ 新增的結果顯示函式 ▼▼▼ ===================
 function displayFinalResult(key) {
     const r = results[key] || results['B-2-focus'];
-    document.getElementById('drinkIcon').textContent = r.icon;
+// 判斷icon是否為SVG路徑
+const iconHost = document.getElementById('drinkIcon');
+if (r.iconSvg) {
+  iconHost.innerHTML = `
+    <img class="icon-svg" src="${r.iconSvg}" alt="${r.drink} 圖示"
+         onerror="this.onerror=null; this.replaceWith(document.createTextNode('${(r.icon || '☕').replace(/'/g, "\\'")}'));">
+  `;
+} else {
+  iconHost.textContent = r.icon || '☕';
+}
     document.getElementById('modelName').textContent = r.model;
     const badge = document.getElementById('badge');
     badge.textContent = r.badge || '';
