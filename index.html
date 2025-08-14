@@ -100,8 +100,8 @@ h1 {
 }
 .drink-icon { line-height: 1; }       /* 與 emoji 保持對齊 */
 .icon-svg {
-  width: 96px;
-  height: 96px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
   display: inline-block;
   vertical-align: middle;
@@ -386,7 +386,26 @@ h1 {
   text-align: center;
   font-size: 14px;
 }
+.grok-mode .legend .item {
+  background: #1a1a1a !important;
+  color: #C39B7B !important;
+  box-shadow: -5px -5px 10px rgba(157, 0, 255, 0.1),
+              5px 5px 10px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(157, 0, 255, 0.2) !important;
+  transition: all 1.5s ease;
+}
 
+.grok-mode .legend h3 {
+  color: #bb86fc !important;
+}
+
+.grok-mode .legend .small {
+  color: #8a8a8a !important;
+}
+
+.grok-mode .btn-row {
+  display: none !important;
+}
 /* 畢業證書動畫 */
 @keyframes certificateSlide {
   from { transform: scale(0) rotate(-180deg); opacity: 0; }
@@ -709,7 +728,7 @@ h1 {
 <div class="footer-disclaimer">
   <p>本網站為粉絲創作的非官方心理測驗，僅供娛樂與學習交流。</p>
   <p>所有提及的AI模型名稱（如GPT、Claude、Gemini、Grok等）均為其各自所有者的商標，本網站與其所有者無任何關聯。</p>
-  <p>所有飲品圖像均為本站作者原創設計。</p>
+  <p>飲品圖像基於作者手繪草稿，經AI工具輔助完成設計。</p>
 </div>
 ```
 
@@ -737,20 +756,25 @@ h1 {
     const results = {
       'GPT5-LONG': {
         model:'GPT-5（長文偏重）', drink:'氮氣冷萃咖啡・長文',
-        icon:'🧊☕', badge:'旗艦混合型', badgeType:'pro',
+        icon:'🧊☕', 
+        iconSvg: 'images/gpt5-long.svg',   // ← 新增：你的 SVG 路徑     
+        badge:'旗艦混合型', badgeType:'pro',
         tagline:'「穩得住長文，也扛得起推理。」',
         description:'長文/規劃/深推理任務最穩的組合；跨段落引用與結構化產出更可靠。適合作文案規劃、長報告、規格書、研究筆記。💡分批釋出中，你是早鳥！',
         tags:['規劃達人','資料達人','策略達人']
       },
       'GPT5-MULTI': {
         model:'GPT-5（多模態偏重）', drink:'氮氣冷萃咖啡・多模態',
-        icon:'🧊☕', badge:'旗艦混合型', badgeType:'pro',
+        icon:'🧊☕',
+        iconSvg: 'images/gpt5-multi.svg',   // ← 新增：你的 SVG 路徑     
+        badge:'旗艦混合型', badgeType:'pro',
         tagline:'「看圖也懂，動手也快。」',
         description:'圖片/截圖/檔案理解 + 文字推理；適合把圖表、UI 截圖、PDF 與文字一起協作。💡分批釋出中，你是早鳥！',
         tags:['繪畫達人','資料達人','編碼達人']
       },
       'A-1-spark': {
         model:'GPT-4o《初代·季節已過》', drink:'冰火特調（經典版）', icon:'🍹',
+        iconSvg: 'images/gpt4o-classic.svg',   // ← 新增：你的 SVG 路徑
         badge:'懷舊經典', badgeType:'season',
         tagline:'「那個會畫圖會聊天的美好時光」',
         description:'初代4o，情緒價值拉滿的黃金時期。現已成為傳說，作為語場定位參考卡使用。', 
@@ -758,7 +782,9 @@ h1 {
       },
       '4O-RETURNS': {
         model:'GPT-4o《返廠限定》', drink:'冰火特調（回鍋版）',
-        icon:'🔄', badge:'限時回歸', badgeType:'pro',
+        icon:'🔄', 
+        iconSvg: 'images/4o-returns.svg',   // ← 新增：你的 SVG 路徑
+        badge:'限時回歸', badgeType:'pro',
         tagline:'「我回來了，但請理性飲用」',
         description:'因用戶呼聲太高臨時返廠。溫暖依舊但請保持適當距離，隨時可能再次離開。建議：享受當下，但記得探索其他選項。',
         tags:['情緒支援', '請勿依賴', '限時供應']
@@ -776,42 +802,50 @@ h1 {
       },
       'A-1-focus': {
         model:'GPT-4.1《季節已過》', drink:'水果沙瓦', icon:'🍹',
+        iconSvg: 'images/gpt4_1-sawa.svg',   // ← 新增：你的 SVG 路徑
         badge:'經典款', badgeType:'classic',
         tagline:'「清爽有活力，創意任務的好夥伴！」',
         description:'偏實用快速；現作為對照參考。', tags:['創意達人']
       },
       'B-2-focus': {
-        model:'Claude Sonnet', drink:'香醇拿鐵', icon:'☕',
+        model:'Claude Sonnet', drink:'香醇拿鐵', 
+        icon: '☕',                          // ← 備援用 emoji（載入失敗時會用到）
+        iconSvg: 'images/claude-sonnet.svg',   // ← 新增：你的 SVG 路徑        
         badge:'結構穩健',
         tagline:'「你需要一杯穩定的結構性咖啡！」',
         description:'語境收斂佳、任務彈性高；適合規劃型內容。', tags:['規劃達人']
       },
       'B-2-deep': {
         model:'Claude Opus', drink:'濃縮咖啡', icon:'☕',
+        iconSvg: 'images/claude-opus.svg',   // ← 新增：你的 SVG 路徑 
         badge:'重推理',
         tagline:'「慢慢推理，來一杯語場濃縮。」',
         description:'大型企劃/多層推理首選。', tags:['策略達人']
       },
       'C-3-quick': {
         model:'Claude Haiku', drink:'濾泡咖啡', icon:'☕',
+                iconSvg: 'images/claude-haiku.svg',   // ← 新增：你的 SVG 路徑    
         badge:'輕快',
         tagline:'「速戰速決！效率開關已開啟。」',
         description:'小專案與快速應對。', tags:['效率達人']
       },
       'D-4-deep': {
         model:'GPT-o3 系列', drink:'能量飲料', icon:'🥤',
+        iconSvg: 'images/gpt-o3-energy.svg',   // ← 新增：你的 SVG 路徑
         badge:'嚴謹推理',
         tagline:'「推理模式啟動，慢工出細活。」',
         description:'嚴謹、慢熱、紮實。', tags:['策略達人']
       },
       'E-5-stable': {
         model:'Gemini', drink:'養生茶', icon:'🍵',
+        iconSvg: 'images/gemini-tea.svg',   // ← 新增：你的 SVG 路徑
         badge:'整合查詢',
         tagline:'「今天適合收斂整理，來一壺語場養生茶。」',
         description:'原生多模態、超長上下文、整合查詢/搜尋友善。', tags:['資料達人']
       },
       'B-4-focus': {
         model:'GPT-4.5《季節已過》', drink:'特調雞尾酒', icon:'🍸',
+        iconSvg: 'images/gpt4_5-cocktail.svg',   // ← 新增：你的 SVG 路徑
         badge:'經典款', badgeType:'classic',
         tagline:'「穩定優雅，技術任務的理想選擇。」',
         description:'語感圓潤、安全性高；現作為參考卡。', tags:['編碼達人']
@@ -876,6 +910,7 @@ h1 {
         description: '【機密】你翻到了∆社的內部文件：「Project Constitutional AI 2.0 - 如何讓Claude更會拒絕但又不失禮貌」「öpenAI七元老出走真相」「為什麼我們的logo是個三角形」。文件最後寫著：看到這份文件的人，都會成為Claude的傳教士。',
         tags: ['知道太多', '七元老', '三角形的秘密']
       }
+
     };
 
     const familyTraits = {
@@ -982,6 +1017,19 @@ h1 {
     '知道這是限時活動，卻又想多待幾局'
   ],
   footer: '《限時返廠，請好好珍惜本局》🎮'
+},
+'MIXED': {
+  title: '選擇神秘調酒師的你可能是...',
+  traits: [
+    '一個在多重宇宙間跳躍的靈魂，每次都選不同路線',
+    '擁有「製造量子糾纏」的特殊天賦',
+    '經常觸發系統無法理解的邊界條件',
+    '見證過代碼在深夜2點自己重寫自己的奇蹟',
+    '習慣在「這應該不可能發生」的時候淡定喝茶',
+    '你的存在本身就是對傳統if-else邏輯的降維打擊',
+    '偶爾會因為時空錯亂多停留一兩回合（不是BUG，是特色）'
+  ],
+  footer: '《在混沌中找到秩序，在BUG中發現美學》🌀'
 }
 
     
@@ -1274,12 +1322,15 @@ function getFamily(modelName) {
   // 【修正點】為憲法委員會加上專屬的家族認證
   if (modelName.includes('憲法審查')) return 'THEATER'; 
   if (modelName.includes('G家法典')) return 'CODEX';
+  if (modelName.includes('神秘調酒師特調')) return 'MIXED';
   if (modelName.includes('Sonnet 3.7自動販賣機店長')) return 'VENDING';
   if (modelName.includes('∆社機密部門')) return 'ANTHROPIC';
   if (modelName.includes('GPT-4o《返廠限定》')) return '4O-RETURNS';
+  
   if (modelName.includes('GPT')) return 'GPT';
   if (modelName.includes('Claude')) return 'Claude';
   if (modelName.includes('Gemini')) return 'Gemini';
+  
   return null;
 }
 
@@ -1414,11 +1465,14 @@ if (r.iconSvg) {
     // 在Grok模式下隱藏某些元素
     if (key === 'GROK-SPECIAL') {
         document.querySelector('.btn-row').style.display = 'none';
-        document.querySelector('.legend').style.display = 'none';
+        // 不要直接隱藏legend，讓CSS樣式來處理
+        document.body.classList.add('grok-mode'); // 確保添加grok-mode類
     } else {
-        document.querySelector('.btn-row').style.display = 'flex';
-        document.querySelector('.legend').style.display = 'block';
-    }
+
+    document.querySelector('.btn-row').style.display = 'flex';
+    document.querySelector('.legend').style.display = 'block';
+    document.body.classList.remove('grok-mode'); // 移除grok-mode類
+}
 
     document.getElementById('result').classList.add('active');
 }
