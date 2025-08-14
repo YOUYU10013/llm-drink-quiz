@@ -54,9 +54,27 @@ h1 {
   text-align: center;
 }
 
+.start-svg {
+  width: 90px;
+  height: 90px;
+  margin: 0 5px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  transition: transform 0.3s ease;
+}
+
+.start-svg:hover {
+  transform: scale(1.1);
+}
+
+/* 調整父容器 */
 .start-icon {
-  font-size: 96px;
   margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* 控制圖片間距 */
 }
 
 .start-btn {
@@ -551,6 +569,7 @@ h1 {
   display: none !important;
 }
 
+
 /* 版權聲明 */
 .footer-disclaimer {
   margin-top: 40px;
@@ -595,7 +614,12 @@ h1 {
 ```
 <!-- 起始畫面 -->
 <div class="start-screen" id="startScreen">
-  <div class="start-icon">🧊☕️🍹🥤🍵</div>
+  <div class="start-icon">
+  <img src="images/gpt5-multi.svg" alt="氮氣冷萃咖啡" class="start-svg">
+  <img src="images/claude-sonnet.svg" alt="拿鐵" class="start-svg">
+  <img src="images/gpt4o-classic.svg" alt="冰火特調" class="start-svg">
+  <img src="images/gemini-tea.svg" alt="養生茶" class="start-svg">
+</div>
   <p style="font-size:16px;color:#4E3B31;margin-bottom:24px">
     每個 AI 模型都有獨特的「語場風味」，<br>
     透過 4 個問題，找出今天最對味的 AI 夥伴！
@@ -1256,7 +1280,7 @@ async function generateShareImage() { // 【修正點】將函式宣告為 async
         image.src = r.iconSvg;
       });
       // 將載入的SVG繪製到畫布上
-      ctx.drawImage(img, W / 2 - 90, 150, 180, 180); // (x, y, 寬, 高)
+      ctx.drawImage(img, W / 2 - 180, 100, 360, 360); // (x, y, 寬, 高) // (x, y, 寬, 高)
     } catch (error) {
       // 如果SVG載入失敗，就畫備援的emoji
       console.error('SVG 載入失敗:', error);
@@ -1272,11 +1296,11 @@ async function generateShareImage() { // 【修正點】將函式宣告為 async
   // --- 繪製其他文字 ---
   ctx.fillStyle = '#5D4037';
   ctx.font = 'bold 40px sans-serif';
-  ctx.fillText(r.model, W / 2, 380);
+  ctx.fillText(r.model, W / 2, 500);
 
   ctx.fillStyle = '#7D5A4C';
   ctx.font = '28px sans-serif';
-  ctx.fillText(r.drink, W / 2, 420);
+  ctx.fillText(r.drink, W / 2, 540);
 
   // 這邊的 drawWrapped 函式保持不變，但我們需要重新定義它
   function drawWrapped(context, text, x, startY, maxWidth, lineHeight, color, font) {
@@ -1299,8 +1323,9 @@ async function generateShareImage() { // 【修正點】將函式宣告為 async
     return y; // 返回最後一行的 y 座標
   }
 
-  const taglineY = drawWrapped(ctx, r.tagline, W/2, 480, 620, 34, '#B07D62', '600 28px sans-serif');
-  drawWrapped(ctx, r.description, W/2, taglineY + 80, 660, 42, '#5D4037', '400 26px sans-serif');
+// tagline和description也要往下移
+const taglineY = drawWrapped(ctx, r.tagline, W/2, 600, 620, 44, '#B07D62', '600 28px sans-serif');
+drawWrapped(ctx, r.description, W/2, taglineY + 90, 720, 72, '#5D4037', '400 26px sans-serif');
 
   ctx.fillStyle = '#7D5A4C';
   ctx.font = '600 26px sans-serif';
