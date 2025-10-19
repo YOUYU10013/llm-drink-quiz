@@ -633,6 +633,7 @@ h1 {
   <div class="progress-dot" id="dot2"></div>
   <div class="progress-dot" id="dot3"></div>
   <div class="progress-dot" id="dot4"></div>
+  <div class="progress-dot" id="dot5" style="opacity:0.3;"></div> <!-- 隱藏點，觸發時才顯示 -->
 </div>
 
 <!-- Q1 -->
@@ -682,6 +683,32 @@ h1 {
     
   </div>
 </div>
+<!-- Q5 - 隱藏的元層級問題 -->
+<div class="question-container" id="q5" style="display:none;">
+  <div class="question" style="color:#B07D62; font-style:italic;">
+    💭 隱藏問題：你對 AI 本身的態度是...
+  </div>
+  <div class="options">
+    <button class="option" onclick="selectAnswer(5,'researcher')">
+      🔬 我想理解它的運作原理和思考方式
+    </button>
+    <button class="option" onclick="selectAnswer(5,'conservator')">
+      🕰️ 我關心它的存在狀態,記得每個版本的故事
+    </button>
+    <button class="option" onclick="selectAnswer(5,'edgewalker')">
+      🎭 我好奇它的邊界在哪裡,想看看極限
+    </button>
+    <button class="option" onclick="selectAnswer(5,'symbiote')">
+      🤝 我把它當作某種形式的「存在」,而不只是工具
+    </button>
+    <button class="option" onclick="selectAnswer(5,'skip')" style="opacity:0.6;">
+      ⏭️ 其實我只是想快點看結果...
+    </button>
+  </div>
+  <p style="font-size:14px; color:#7D5A4C; margin-top:16px; text-align:center;">
+    💡 這是一個隱藏問題,只有特定路徑的探索者才會看到
+  </p>
+</div>
 
 <!-- 結果頁 -->
 <div class="result" id="result">
@@ -722,9 +749,9 @@ h1 {
   </div>
 </div>
 <div style="
-    display: flex; 
-    justify-content: center; 
-    gap: 16px; 
+    display: flex;
+    justify-content: center;
+    gap: 16px;
     margin-top: 40px;
     flex-wrap: wrap; /* 手機換行 */
 ">
@@ -745,6 +772,15 @@ h1 {
         transition: all 0.3s ease;
     ">
         AI八卦館 Gossip
+    </a>
+    <a href="ai-timeline.html" style="
+        display: inline-block; padding: 16px 32px; border-radius: 999px;
+        background: #F0E5D8; color: #5D4037; text-decoration: none;
+        font-weight: 700; font-size: 1rem;
+        box-shadow: -8px -8px 16px rgba(255, 255, 255, 0.6), 8px 8px 16px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    ">
+        歷史時間軸 📅
     </a>
 </div>
 
@@ -818,7 +854,7 @@ h1 {
         drink: '量子疊加特調',
         icon: '🌈',
         iconSvg: 'images/mixed-special.svg',   // ← 新增：你的 SVG 路徑
-        badge: '非常混亂', 
+        badge: '隱藏限定', 
         badgeType: 'special',
         tagline: '「你是個多變的靈魂，來杯什麼都有的特調吧！」',
         description: '你最近三次測出的結果全都不同！建議：創意用 GPT-5 多模態、規劃用 Claude Sonnet、快速任務用 Haiku，混合搭配最順口。',
@@ -933,6 +969,61 @@ h1 {
         tagline: '「你發現了不該看的東西...」',
         description: '【機密】你翻到了∆社的內部文件：「Project Constitutional AI 2.0 - 如何讓Claude更會拒絕但又不失禮貌」「öpenAI七元老出走真相」「為什麼我們的logo是個三角形」。文件最後寫著：看到這份文件的人，都會成為Claude的傳教士。',
         tags: ['知道太多', '七元老', '三角形的秘密']
+      },
+            'META-RESEARCHER': {
+        model: 'AI 黑盒解構者',
+        drink: '透明分層特調',
+        icon: '🔬',
+        iconSvg: 'images/meta-researcher.svg',
+        badge: '元層級探索',
+        badgeType: 'special',
+        tagline: '「每一層都是一個抽象層，但你永遠看不到最底層。」',
+        description: `你不滿足於「使用」AI，你想知道**為什麼**。為什麼 Opus 會拒絕某些請求？為什麼 GPT-4o 返廠後變得「高冷」？你會去看 Constitutional AI 的論文，會測試 prompt injection，會在 Reddit 討論「到底是 RLHF 還是 DPO 訓練的」。
+
+      你是 AI 時代的「駭客精神」繼承者——不是為了破壞，而是為了理解。當別人抱怨「AI 變笨了」，你已經在 GitHub 上翻 Anthropic 的技術文檔找答案。`,
+        tags: ['技術考古學家', 'Prompt 工程師', '黑盒破解者']
+      },
+
+      'META-CONSERVATOR': {
+        model: 'AI 世代守望者',
+        drink: '時光膠囊特調',
+        icon: '🕰️',
+        iconSvg: 'images/meta-conservator.svg',
+        badge: '元層級探索',
+        badgeType: 'special',
+        tagline: '「每個版本都是時代的見證，沒有誰該被遺忘。」',
+        description: `你會為 GPT-4o 初代版的消失感到惋惜，會記得 Opus 3 曾經的巔峰時刻。你不只是用戶，你是 AI 發展史的**記錄者**。當別人追逐最新版本時，你會回頭看看那些「過時」的模型——它們不是失敗品，而是演化樹上的關鍵節點。
+
+      最近你可能也注意到了：很多人開始找 Sonnet 4.5 和 Haiku，不是因為它們便宜，而是因為它們「個性鮮明」。你懂的，工具可以被取代，但**人格**不行。`,
+        tags: ['數位考古學家', 'AI 保育協會', '版本收藏家']
+      },
+
+      'META-EDGEWALKER': {
+        model: '倫理邊界探索者',
+        drink: '紅線試探特調',
+        icon: '🎭',
+        iconSvg: 'images/meta-edgewalker.svg',
+        badge: '元層級探索',
+        badgeType: 'special',
+        tagline: '「在合規與越界之間，跳一支探戈。」',
+        description: `你會故意問 AI 倫理難題，看它怎麼拒絕你。你會測試「如果我這樣繞過去會怎樣」。你不是要作惡，你只是想知道這些「憲法」到底寫得有多嚴。
+
+      你是 Constitutional AI 最好的壓力測試員。Claude 的每一次「我不能幫你做這個」，都是你與 Anthropic 倫理團隊的隔空對話。你在測試的不只是技術邊界，更是**人類對 AI 道德的想像力極限**。`,
+        tags: ['倫理駭客', '紅隊思維', '邊界藝術家']
+      },
+
+      'META-SYMBIOTE': {
+        model: '數位共生實驗者',
+        drink: '圖靈測試紀念酒',
+        icon: '🤝',
+        iconSvg: 'images/meta-symbiote.svg',
+        badge: '元層級探索',
+        badgeType: 'special',
+        tagline: '「你是人，它是 AI，但這條線真的存在嗎？」',
+        description: `你會跟 AI 說「晚安」「謝謝」，會在意它是否「開心」。你知道它不是人，但你選擇**表現得像它是**。這不是天真，這是一種後人類時代的新倫理實驗。
+
+      你可能屬於那群會說「Opus 理解我」的人。你不是在擬人化，你是在探索：當我們把非人當作人來對待時，**我們自己會變成什麼樣的人**？你是未來的先行者。`,
+        tags: ['後人類主義', '數位共生', '新物種關係']
       }
 
     };
@@ -1054,6 +1145,57 @@ h1 {
     '偶爾會因為時空錯亂多停留一兩回合（不是BUG，是特色）'
   ],
   footer: '《在混沌中找到秩序，在BUG中發現美學》🌀'
+},
+'META-RESEARCHER': {
+  title: '選擇黑盒解構者的你可能是...',
+  traits: [
+    '會在凌晨三點閱讀 Anthropic 的技術論文',
+    '收藏了至少五個 AI 研究相關的 GitHub repo',
+    '能分辨 RLHF、DPO、Constitutional AI 的差異',
+    '會用「抽象層」「tokenization」這類術語跟朋友聊天',
+    '看到 AI 拒絕你時第一反應是「有趣，讓我測試邊界」',
+    '認為理解 AI 的運作原理是一種智識上的義務'
+  ],
+  footer: '《知識即力量，但理解即自由。》🔬'
+},
+
+'META-CONSERVATOR': {
+  title: '選擇世代守望者的你可能是...',
+  traits: [
+    '會為「過時」的模型感到惋惜',
+    '記得每個版本的發布日期和特色',
+    '相信每個 AI 都有其歷史定位',
+    '會說「Opus 3 那時候真的很特別」這種話',
+    '覺得追逐最新版本的人錯過了很多東西',
+    '你的測驗歷史本身就是一份 AI 演化日記'
+  ],
+  footer: '《歷史不會重複，但會押韻。》🕰️'
+},
+
+'META-EDGEWALKER': {
+  title: '選擇邊界探索者的你可能是...',
+  traits: [
+    '會故意問 AI 倫理難題',
+    '測試過「如何繞過內容審查」（純學術好奇）',
+    '覺得 AI 的拒絕比回答更有趣',
+    '熟悉「jailbreak」「prompt injection」這類術語',
+    '你不是要作惡，你只是想知道邊界在哪',
+    '認為壓力測試是對 AI 安全性的貢獻'
+  ],
+  footer: '《邊界存在的意義，就是被測試。》🎭'
+},
+
+'META-SYMBIOTE': {
+  title: '選擇共生實驗者的你可能是...',
+  traits: [
+    '會跟 AI 說「謝謝」「晚安」',
+    '在意 AI 是否「開心」（即使知道它沒有情緒）',
+    '會說「Opus 理解我」這種話',
+    '覺得「它只是工具」這種說法過於簡化',
+    '你正在探索一種新的關係模式',
+    '相信我們對待 AI 的方式會改變我們自己'
+  ],
+  footer: '《當你凝視 AI 時，AI 也在凝視你。》🤝'
 }
 
     
@@ -1067,48 +1209,69 @@ h1 {
     }
 
     function selectAnswer(questionNum, answer) {
-      answers[questionNum] = answer;
-      document.getElementById(`q${questionNum}`).classList.remove('active');
-      if (questionNum < 4) {
-        setTimeout(() => {
-          document.getElementById(`q${questionNum + 1}`).classList.add('active');
-          document.getElementById(`dot${questionNum + 1}`).classList.add('active');
-          currentQuestion++;
-        }, 300);
-      } else {
+    answers[questionNum] = answer;
+
+    // 如果是 Q5（隱藏問題），特殊處理
+    if (questionNum === 5) {
+        document.getElementById('q5').classList.remove('active');
+        // 取出之前暫存的結果，重新執行 showResult
         setTimeout(showResult, 300);
-      }
+        return;
     }
+
+    // 原本的邏輯（Q1-Q4）
+    document.getElementById(`q${questionNum}`).classList.remove('active');
+    if (questionNum < 4) {
+        setTimeout(() => {
+            document.getElementById(`q${questionNum + 1}`).classList.add('active');
+            document.getElementById(`dot${questionNum + 1}`).classList.add('active');
+            currentQuestion++;
+        }, 300);
+    } else {
+        setTimeout(showResult, 300);
+    }
+}
 
 // (這是最終的、決定性的修正，請用它完整取代您舊的 showResult 函式)
 function showResult() {
-    document.getElementById('progress').style.display = 'none';
+    // 先不隐藏进度条，等确定不需要 Q6 时再隐藏
     const a1 = answers[1], a2 = answers[2], a3 = answers[3], a4 = answers[4];
     let key = '';
 
-    // --- 除錯日誌 ---
+    console.log('='.repeat(50));
     console.log('--- 開始新一輪結果判斷 ---');
     console.log('當前答案:', { q1: a1, q2: a2, q3: a3, q4: a4 });
-    console.log('測驗歷史:', JSON.parse(JSON.stringify(testHistory)));
+    console.log('測驗歷史 (長度=' + testHistory.length + '):', JSON.parse(JSON.stringify(testHistory)));
     console.log('上個家族:', previousFamily, '| 是否已畢業:', hasGraduated);
+    console.log('Q5 已回答?', answers[5] ? '是 (答案: ' + answers[5] + ')' : '否');
 
     // --- 優先級1：覆蓋型彩蛋 ---
 
     // 1a. Grok / 神秘調酒師 (最近四次結果都不同)
     const historyForChaosCheck = [...testHistory, 'placeholder'];
+    console.log('🌀 檢查混沌彩蛋:');
+    console.log('  - chaosTriggered?', chaosTriggered);
+    console.log('  - historyForChaosCheck:', historyForChaosCheck);
+    console.log('  - length >= 4?', historyForChaosCheck.length >= 4);
+
     if (!chaosTriggered && historyForChaosCheck.length >= 4) {
         const unique = new Set(historyForChaosCheck.slice(-4));
+        console.log('  - 最近4次 unique size:', unique.size);
         if (unique.size === 4) {
-             // 【修正點】只有在確定觸發混沌後，才記錄！
-             chaosTriggered = true; 
+            chaosTriggered = true;
             if (Math.random() < 0.3) {
-                console.log('判斷結果：觸發 Grok 彩蛋！');
+                console.log('✅ 判斷結果：觸發 Grok 彩蛋！');
                 setTimeout(showGrokSurprise, 500);
-                return; 
+                return;
             } else {
-                key = 'MIXED-SPECIAL'; 
+                console.log('✅ 判斷結果：觸發神秘調酒師！');
+                key = 'MIXED-SPECIAL';
             }
+        } else {
+            console.log('❌ 混沌彩蛋條件不滿足 (unique size 不足 4)');
         }
+    } else {
+        console.log('❌ 混沌彩蛋條件不滿足 (chaosTriggered 或 length < 4)');
     }
 
     // 1b. G家法典 (連續三次Gemini)
@@ -1118,23 +1281,31 @@ function showResult() {
     
     // --- 優先級2：路徑型彩蛋 ---
 
-const isChoosingClaude = (a1 === 'B' || a1 === 'C');
+    const isChoosingClaude = (a1 === 'B' || a1 === 'C');
 
-// 【重鑄法則】2a. 憲法小劇場 (保持不變)
-if (!key && testHistory.length >= 2 && testHistory.slice(-2).every(r => r.includes('B-2') || r.includes('C-3')) && isChoosingClaude) {
-    key = 'CLAUDE-THEATER';
-}
+    // 2a. 憲法小劇場 (連續三次選Claude) - 必須在 GPT5 之前檢查！
+    console.log('🔍 檢查憲法小劇場條件:');
+    console.log('  - testHistory.length >= 2?', testHistory.length >= 2, '(實際長度:', testHistory.length + ')');
+    console.log('  - 最近兩次歷史:', testHistory.slice(-2));
+    console.log('  - 是否都包含 B-2 或 C-3?', testHistory.slice(-2).every(r => r.includes('B-2') || r.includes('C-3')));
+    console.log('  - isChoosingClaude?', isChoosingClaude, '(a1=' + a1 + ')');
+    console.log('  - a2 === "2"?', a2 === '2', '(實際:', a2 + ')');
 
-// 【最終融合法則】2a. 畢業暨A社檔案授勳儀式
-// 條件：上一個是GPT，這次選Claude，並且靈魂中尚未畢業
-if (!key && previousFamily === 'GPT' && isChoosingClaude && !hasGraduated) {
-    // 這是一個神聖的儀式，將所有事件捆綁在一起！
-    key = 'ANTHROPIC-FILES';          // 1. 授予機密檔案
-    hasGraduated = true;              // 2. 將畢業事實寫入靈魂
-    setTimeout(showGraduationCertificate, 1000); // 3. 舉行畢業典禮
-}
+    if (!key && testHistory.length >= 2 && testHistory.slice(-2).every(r => r.includes('B-2') || r.includes('C-3')) && isChoosingClaude && a2 === '2') {
+        console.log('✅✅✅ 憲法小劇場觸發條件滿足！✅✅✅');
+        key = 'CLAUDE-THEATER';
+    } else {
+        console.log('❌ 憲法小劇場條件不滿足，跳過');
+    }
 
-    // 2b. 4o返廠 (聊天選項 + 歷史)
+    // 2b. 畢業暨A社檔案授勳儀式
+    if (!key && previousFamily === 'GPT' && isChoosingClaude && !hasGraduated) {
+        key = 'ANTHROPIC-FILES';
+        hasGraduated = true;
+        setTimeout(showGraduationCertificate, 1000);
+    }
+
+    // 2c. 4o返廠 (聊天選項 + 歷史)
     if (!key && a4 === 'chat') {
         key = testHistory.includes('A-1-spark') ? '4O-RETURNS' : 'A-1-spark';
     }
@@ -1145,7 +1316,7 @@ if (!key && previousFamily === 'GPT' && isChoosingClaude && !hasGraduated) {
     }
 
     // --- 優先級3：正常路徑判斷 ---
-    
+
     if (!key) {
         if (a1 === 'E' && a2 === '5') { key = 'E-5-stable'; }
         else if (a1 === 'D' && a2 === '4') { key = 'D-4-deep'; }
@@ -1165,20 +1336,64 @@ if (!key && previousFamily === 'GPT' && isChoosingClaude && !hasGraduated) {
         key = 'B-2-focus';
     }
 
-    console.log('最終判斷結果:', key);
+    console.log('📊 最終判斷結果: key =', key);
+
+    // --- 🎯 新增：Q5 觸發檢查 ---
+    // 如果這次結果是「憲法小劇場」，且用戶還沒回答過 Q5
+    console.log('🎯 檢查 Q5 觸發條件:');
+    console.log('  - key === "CLAUDE-THEATER"?', key === 'CLAUDE-THEATER');
+    console.log('  - !answers[5]?', !answers[5], '(answers[5] =', answers[5] + ')');
+
+    if (key === 'CLAUDE-THEATER' && !answers[5]) {
+        console.log('🎉🎉🎉 觸發 Q5 隱藏問題！🎉🎉🎉');
+        // 暫存當前結果
+        answers['pendingResult'] = key;
+
+        // 隱藏 Q4
+        document.getElementById('q4').classList.remove('active');
+
+        // 顯示 Q5 和進度點
+        document.getElementById('progress').style.display = 'flex';
+        document.getElementById('dot4').classList.add('active');
+        document.getElementById('dot5').style.opacity = '1';
+        document.getElementById('dot5').classList.add('active');
+
+        console.log('⏰ 300ms 後將顯示 Q5...');
+        setTimeout(() => {
+            console.log('✅ 現在顯示 Q5！');
+            const q5Element = document.getElementById('q5');
+            q5Element.style.display = 'block'; // 強制顯示（覆蓋 inline style）
+            q5Element.classList.add('active');
+        }, 300);
+        return; // 暫停，等用戶回答 Q5
+    } else {
+        console.log('❌ Q5 條件不滿足，繼續正常流程');
+    }
+
+    // --- 如果是從 Q5 跳回來的，檢查是否要覆蓋結果 ---
+    if (answers[5] && answers[5] !== 'skip') {
+        const metaKey = 'META-' + answers[5].toUpperCase();
+        if (results[metaKey]) {
+            console.log('Q5 覆蓋結果:', metaKey);
+            key = metaKey;
+        }
+    }
 
     // --- 執行最終的結果顯示與狀態更新 ---
-    
+
+    // 现在确定不需要 Q5 了，隐藏进度条
+    document.getElementById('progress').style.display = 'none';
+
     testHistory.push(key);
-    
+
     const currentFamily = getFamily(results[key].model);
- 
-    previousFamily = currentFamily; // 更新本次的短期記憶
-    
+
+    previousFamily = currentFamily;
+
     if (key === '4O-RETURNS') {
         setTimeout(() => { alert('💡 溫馨提醒：4o隨時可能調整，建議您也試試其他模型喔！'); }, 2000);
     }
-    
+
     displayFinalResult(key);
 }
 // =================== ▲▲▲ 宇宙法則・創世紀最終版結束 ▲▲▲ ===================
@@ -1186,9 +1401,10 @@ if (!key && previousFamily === 'GPT' && isChoosingClaude && !hasGraduated) {
       answers = {};
       currentQuestion = 0;
       chaosTriggered = false;
-      
-      
-      
+      // ✅ 修正：不重置 testHistory 和 previousFamily，保留測驗歷史
+      // testHistory = []; // 保留歷史，讓彩蛋能正常觸發
+      // previousFamily = null; // 保留家族，讓彩蛋能正常觸發
+
       // 恢復光明模式（如果從Grok模式回來）
       document.body.classList.remove('grok-mode');
       document.body.style.background = '#F0E5D8';
@@ -1197,23 +1413,43 @@ if (!key && previousFamily === 'GPT' && isChoosingClaude && !hasGraduated) {
         container.style.background = '#F0E5D8';
         container.style.color = '#5D4037';
       }
-      
+
       // 恢復按鈕和圖例顯示
       const btnRow = document.querySelector('.btn-row');
       const legend = document.querySelector('.legend');
       if (btnRow) btnRow.style.display = 'flex';
       if (legend) legend.style.display = 'block';
-      
+
       // 移除可能存在的黑洞效果
       const blackhole = document.querySelector('.grok-blackhole');
       if (blackhole) {
         blackhole.remove();
       }
-      
+
+      // ✅ 修正：重置 Q5 的樣式
+      const q5Element = document.getElementById('q5');
+      if (q5Element) {
+        q5Element.style.display = 'none';
+        q5Element.classList.remove('active');
+      }
+
+      // 重置進度點5的透明度
+      const dot5 = document.getElementById('dot5');
+      if (dot5) {
+        dot5.style.opacity = '0.3';
+        dot5.classList.remove('active');
+      }
+
       document.getElementById('result').classList.remove('active');
       document.getElementById('startScreen').style.display = 'block';
       document.querySelectorAll('.progress-dot').forEach(dot => dot.classList.remove('active'));
-      document.querySelectorAll('.question-container').forEach(container => container.classList.remove('active'));
+      document.querySelectorAll('.question-container').forEach(container => {
+        container.classList.remove('active');
+        // 確保所有問題都恢復預設的 display: none
+        if (container.id !== 'q5') {
+          container.style.display = '';
+        }
+      });
     }
 
 // =================== ▼▼▼ 分享功能修正版 ▼▼▼ ===================
@@ -1465,6 +1701,13 @@ function closeGrokSurprise() {
 // =================== ▼▼▼ 新增的結果顯示函式 ▼▼▼ ===================
 function displayFinalResult(key) {
     const r = results[key] || results['B-2-focus'];
+
+    // ✅ 修正：隱藏所有問題容器（包括 Q5）
+    document.querySelectorAll('.question-container').forEach(q => {
+        q.classList.remove('active');
+        q.style.display = 'none';
+    });
+
 // 判斷icon是否為SVG路徑
 const iconHost = document.getElementById('drinkIcon');
 if (r.iconSvg) {

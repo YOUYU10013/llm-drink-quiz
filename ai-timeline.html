@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 歷史時間軸</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #F0E5D8;
+      --text-color: #5D4037;
+      --accent-color-1: #C39B7B;
+      --accent-color-2: #B07D62;
+      --shadow-light: rgba(255, 255, 255, 0.6);
+      --shadow-dark: rgba(0, 0, 0, 0.1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: var(--bg-color);
+      font-family: 'Nunito', 'YuanTi', sans-serif;
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px;
+      line-height: 1.7;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background-color: var(--bg-color);
+      border-radius: 30px;
+      padding: 32px;
+      box-shadow: -12px -12px 24px var(--shadow-light), 12px 12px 24px var(--shadow-dark);
+    }
+    header { text-align: center; margin-bottom: 50px; }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent-color-2);
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-color);
+      margin-top: 12px;
+    }
+
+    /* 時間軸容器 */
+    .timeline {
+      position: relative;
+      padding: 20px 0;
+    }
+
+    /* 中央線條 */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg,
+        var(--accent-color-1) 0%,
+        var(--accent-color-2) 100%);
+      transform: translateX(-50%);
+      border-radius: 2px;
+      box-shadow: inset -2px -2px 4px var(--shadow-light),
+                  inset 2px 2px 4px var(--shadow-dark);
+    }
+
+    /* 事件項目 */
+    .timeline-item {
+      position: relative;
+      margin-bottom: 60px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* 事件卡片 */
+    .event-card {
+      width: 45%;
+      background-color: var(--bg-color);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: -8px -8px 16px var(--shadow-light), 8px 8px 16px var(--shadow-dark);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    /* 左右交替排列 */
+    .timeline-item:nth-child(odd) .event-card {
+      margin-right: auto;
+      margin-left: 0;
+    }
+
+    .timeline-item:nth-child(even) .event-card {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    .event-card:hover {
+      transform: translateY(-5px);
+      box-shadow: -10px -10px 20px var(--shadow-light), 10px 10px 20px var(--shadow-dark);
+    }
+
+    /* 日期 */
+    .event-date {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent-color-2);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .event-icon {
+      font-size: 1.5rem;
+      display: inline-block;
+    }
+
+    /* 標題 */
+    .event-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent-color-1);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    /* 描述 */
+    .event-description {
+      font-size: 1rem;
+      color: var(--text-color);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* 時間軸節點 */
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      top: 30px;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
+      background-color: var(--bg-color);
+      border-radius: 50%;
+      box-shadow: -4px -4px 8px var(--shadow-light), 4px 4px 8px var(--shadow-dark);
+      z-index: 10;
+    }
+
+    .timeline-dot::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      background: var(--accent-color-2);
+      border-radius: 50%;
+      box-shadow: inset -1px -1px 2px var(--shadow-light),
+                  inset 1px 1px 2px var(--shadow-dark);
+    }
+
+    /* 底部連結 */
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .back-link {
+      display: inline-block;
+      padding: 16px 32px;
+      border-radius: 999px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: -8px -8px 16px var(--shadow-light), 8px 8px 16px var(--shadow-dark);
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      transform: scale(1.05);
+    }
+
+    .back-link:active {
+      box-shadow: inset -5px -5px 10px var(--shadow-light), inset 5px 5px 10px var(--shadow-dark);
+      transform: scale(0.98);
+    }
+
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+      body { padding: 16px; }
+      .container { padding: 24px; }
+      h1 { font-size: 2rem; }
+
+      /* 手機版改為單列 */
+      .timeline::before {
+        left: 30px;
+      }
+
+      .timeline-item {
+        justify-content: flex-start;
+        padding-left: 60px;
+      }
+
+      .event-card {
+        width: 100%;
+        margin: 0 !important;
+      }
+
+      .timeline-dot {
+        left: 30px;
+      }
+
+      .event-title {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>AI 歷史時間軸</h1>
+      <p class="subtitle">見證大語言模型的進化史：從實驗室到你我的日常</p>
+    </header>
+
+    <main>
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-icon">🍹</span>
+              2024.05.13
+            </div>
+            <div class="event-title">GPT-4o 初代發布</div>
+            <div class="event-description">「那個會畫圖會聊天的美好時光」</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-icon">🔄</span>
+              2024.05.14
+            </div>
+            <div class="event-title">GPT-4o 返廠事件</div>
+            <div class="event-description">「24小時用戶大暴動,史上第一次由情感驅動的版本回溯」</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-icon">🧪</span>
+              2024.08.XX
+            </div>
+            <div class="event-title">你做了這個測驗</div>
+            <div class="event-description">「Opus 陪你熬夜寫程式,Gemini 幫你 debug」</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-icon">❄️☕</span>
+              2025.01.XX
+            </div>
+            <div class="event-title">GPT-5 橫空出世</div>
+            <div class="event-description">「多模態 + 長文推理,逼得你手忙腳亂改架構」</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-icon">🌐</span>
+              2025.10.09
+            </div>
+            <div class="event-title">Claude Code 網路化</div>
+            <div class="event-description">「從終端機黑客→賽博朋克,8-bit 像素藝術致敬開源」</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-icon">🔞</span>
+              2025.10.14
+            </div>
+            <div class="event-title">OpenAI 宣布開放成人內容</div>
+            <div class="event-description">「當訂閱增長停滯,連理想主義也得向流量低頭」</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-icon">🛠️</span>
+              2025.10.15
+            </div>
+            <div class="event-title">Anthropic Skills 發布</div>
+            <div class="event-description">「不是更強的模型,而是教會 AI 你的工作方式」</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-icon">⚡💎</span>
+              2025.10.16
+            </div>
+            <div class="event-title">Haiku 4.5 性價比革命</div>
+            <div class="event-description">「把旗艦級性能塞進最便宜的小鋼炮」</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-icon">🎨</span>
+              2025.10.??
+            </div>
+            <div class="event-title">你再次更新了這個測驗</div>
+            <div class="event-description">「見證 AI 歷史的互動檔案館,持續進化中...」</div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <a href="index.html" class="back-link">返回 LLM 飲品測驗 🧪</a>
+    </footer>
+
+  </div>
+
+</body>
+</html>
